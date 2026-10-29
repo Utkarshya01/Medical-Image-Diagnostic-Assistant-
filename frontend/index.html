@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Medical Diagnostic Assistant – Local research/demo only. Not a medical device. Consult a healthcare professional." />
+  <title>Medical Diagnostic Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════
+       TOP DISCLAIMER RIBBON  (persistent safety language)
+  ═══════════════════════════════════════════════════════ -->
+  <div class="top-ribbon" role="alert">
+    <span class="ribbon-icon">⚕</span>
+    <span>
+      <strong>Research &amp; demo aid only — not a medical device.</strong>
+      Not for diagnosis, treatment, or ruling out disease. All diagnostic decisions must be made by a qualified
+      healthcare professional.
+    </span>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       APP SHELL
+  ═══════════════════════════════════════════════════════ -->
+  <div class="app-shell">
+
+    <!-- ── 4-SECTION VERTICAL SIDEBAR ──────────────────────── -->
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+
+      <!-- Logo & Toggle Bar -->
+      <div class="sidebar-brand">
+        <div class="brand-info">
+          <span class="brand-icon" title="Medical Diagnostic Assistant">🩺</span>
+          <div class="brand-text">
+            <span class="brand-title">Diagnostic Assistant</span>
+            <span class="brand-sub">Research Demo · Local Only</span>
+          </div>
+        </div>
+        <button type="button" class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle sidebar"
+          title="Toggle sidebar (Ctrl+B)">
+          <svg class="toggle-icon-bars" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6" class="bar bar-top"></line>
+            <line x1="3" y1="12" x2="21" y2="12" class="bar bar-mid"></line>
+            <line x1="3" y1="18" x2="21" y2="18" class="bar bar-bot"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Nav items: Exactly 4 sections from upload through summary -->
+      <nav class="sidebar-nav" aria-label="Four workflow sections">
+        <button class="nav-item active" data-panel="labreport" id="nav-labreport" aria-current="page"
+          title="Lab Report">
+          <span class="nav-icon">🧪</span>
+          <span class="nav-label">Lab Report</span>
+        </button>
+        <button class="nav-item" data-panel="xray" id="nav-xray" title="Chest X-Ray">
+          <span class="nav-icon">🫁</span>
+          <span class="nav-label">Chest X-Ray</span>
+        </button>
+        <button class="nav-item" data-panel="notes" id="nav-notes" title="Symptom Notes">
+          <span class="nav-icon">📝</span>
+          <span class="nav-label">Symptom Notes</span>
+        </button>
+        <button class="nav-item" data-panel="findings" id="nav-findings" title="Findings Summary">
+          <span class="nav-icon">📋</span>
+          <span class="nav-label">Findings Summary</span>
+        </button>
+      </nav>
+
+      <!-- Sidebar footer status & settings -->
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-row">
+          <div class="api-status-col">
+            <div class="api-status-row">
+              <span class="status-dot" id="sidebarDot"></span>
+              <span class="status-text" id="sidebarStatusText">Checking API…</span>
+            </div>
+            <div class="sidebar-stage">Local Demo</div>
+          </div>
+          <div class="sidebar-settings-wrap">
+            <button type="button" class="sidebar-settings-btn" id="settingsBtn" aria-label="Settings"
+              aria-haspopup="true" aria-expanded="false" title="Settings">
+              <svg class="gear-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path
+                  d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                </path>
+              </svg>
+            </button>
+
+            <!-- Floating Settings Popup Menu (VS Code / Modern IDE style) -->
+            <div class="settings-popup" id="settingsPopup" role="menu" aria-label="Settings Menu" hidden>
+              <div class="settings-menu-group">
+                <!-- Theme option with flyout submenu -->
+                <div class="settings-menu-item has-submenu" id="themeMenuTrigger" tabindex="0" role="menuitem"
+                  aria-haspopup="true">
+                  <div class="menu-item-left">
+                    <span class="menu-icon">🎨</span>
+                    <span class="menu-label">Themes</span>
+                  </div>
+                  <span class="menu-arrow">›</span>
+
+                  <div class="settings-submenu" id="themeSubmenu" role="menu">
+                    <button type="button" class="submenu-item" data-theme-set="dark" id="themeDarkBtn"
+                      role="menuitem">
+                      <span class="sub-icon">🌙</span>
+                      <span class="sub-label">Dark Modern</span>
+                      <span class="sub-check" aria-hidden="true">✓</span>
+                    </button>
+                    <button type="button" class="submenu-item active" data-theme-set="light" id="themeLightBtn"
+                      role="menuitem">
+                      <span class="sub-icon">☀️</span>
+                      <span class="sub-label">Light Medical</span>
+                      <span class="sub-check" aria-hidden="true">✓</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="settings-divider"></div>
+
+              <div class="settings-menu-group">
+                <button type="button" class="settings-menu-item" id="openFutureScopeBtn" role="menuitem">
+                  <div class="menu-item-left">
+                    <span class="menu-icon">✨</span>
+                    <span class="menu-label">Future scope</span>
+                  </div>
+                  <span class="menu-tag">Scope</span>
+                </button>
+
+                <button type="button" class="settings-menu-item" id="openDatasetBtn" role="menuitem">
+                  <div class="menu-item-left">
+                    <span class="menu-icon">📂</span>
+                    <span class="menu-label">Dataset</span>
+                  </div>
+                  <span class="menu-tag">Privacy</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Mobile overlay -->
+    <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true"></div>
+
+    <!-- ── MAIN CONTENT ──────────────────────────────────── -->
+    <main class="main-content" id="mainContent">
+
+      <!-- Mobile top-bar -->
+      <header class="mobile-topbar" role="banner">
+        <button class="hamburger" id="hamburger" aria-label="Open navigation" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <span class="mobile-title" id="mobileTitle">Lab Report Analysis</span>
+      </header>
+
+      <!-- ══════════════════════════════════════════════════
+           SECTION — Lab Report (Upload & Review)
+      ══════════════════════════════════════════════════ -->
+      <section class="panel active" id="panel-labreport" aria-label="Lab Report Upload and Review">
+        <div class="panel-header">
+          <h1 class="panel-title">Lab Report Analysis &amp; Review</h1>
+        </div>
+
+        <div class="panel-body">
+
+          <!-- Privacy & Local Processing Notice -->
+          <div class="privacy-banner" role="note">
+            <span class="privacy-icon">🔒</span>
+            <div>
+              <strong>Privacy-First &amp; Local Only:</strong>
+              Uploaded lab reports are parsed in computer memory (RAM) and immediately discarded.
+              Files are never saved to disk, never logged, and never transmitted across the network.
+            </div>
+          </div>
+
+          <!-- Split Row: Upload Lab Report + Report-Extracted Facts side by side -->
+          <div class="split-row">
+            <!-- Upload Drop Zone Card -->
+            <div class="upload-card" id="labCard">
+              <div class="upload-card-header">
+                <span class="upload-icon">🧪</span>
+                <div>
+                  <h2 class="upload-card-title">Upload Lab Report</h2>
+                  <p class="upload-card-sub">PDF or Image · Max 20 MB · 100% On-Device Browser Memory (Wasm)</p>
+                </div>
+              </div>
+
+              <div class="drop-zone" id="labDropZone" role="region" aria-label="Lab report drop zone" tabindex="0">
+                <div class="drop-zone-inner" id="labDropInner">
+                  <div class="drop-icon">📄</div>
+                  <p class="drop-text">Drag &amp; drop a PDF or image here</p>
+                  <p class="drop-sub">or</p>
+                  <label class="btn btn-primary" for="labFileInput" id="labFileLabel">
+                    Choose File
+                    <input type="file" id="labFileInput" accept=".pdf,.png,.jpg,.jpeg"
+                      aria-label="Choose lab report file" />
+                  </label>
+                </div>
+                <div class="drop-zone-preview hidden" id="labPreview">
+                  <div class="preview-info">
+                    <span class="preview-icon" id="labPreviewIcon">📄</span>
+                    <div>
+                      <p class="preview-name" id="labPreviewName">—</p>
+                      <p class="preview-size" id="labPreviewSize">—</p>
+                    </div>
+                  </div>
+                  <div class="preview-actions">
+                    <button type="button" class="btn btn-primary" id="labAnalyseBtn">🔍 Analyse Report</button>
+                    <button type="button" class="btn btn-ghost" id="labClearBtn">✕ Clear</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Upload & Parsing Progress -->
+              <div class="upload-status hidden" id="labStatus">
+                <div class="progress-bar">
+                  <div class="progress-fill" id="labProgress"></div>
+                </div>
+                <p class="upload-status-text" id="labStatusText">Parsing…</p>
+              </div>
+
+              <!-- Recoverable Error Box -->
+              <div class="recoverable-error-box hidden" id="labErrorBox">
+                <div class="recoverable-error-header">⚠️ <span id="labErrorTitle">Upload Error</span></div>
+                <p class="recoverable-error-body" id="labErrorMsg"></p>
+                <div class="recoverable-error-actions">
+                  <button type="button" class="btn btn-sm btn-ghost" id="labRetryBtn">✕ Clear &amp; Try Another
+                    File</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Report-Extracted Facts Card (Side by side with Upload) -->
+            <div class="findings-card side-facts-card" id="sideLabFactsCard">
+              <div class="findings-card-title-row"
+                style="display:flex; justify-content:space-between; align-items:center; padding:.85rem 1.2rem; background:var(--bg-card-hi); border-bottom:1px solid var(--border);">
+                <h2 class="findings-card-title"
+                  style="margin:0; padding:0; background:none; border:none; font-size:.9rem;">🧪 Report-Extracted Facts
+                  (Source: Uploaded Lab Report)</h2>
+                <span class="badge"
+                  style="font-size:.72rem; background:rgba(59,130,246,0.15); color:var(--accent);">Report Facts
+                  Only</span>
+              </div>
+              <div class="findings-card-body" id="sideLabFactsBody">
+                <div class="findings-empty-wrap">
+                  <div class="findings-empty-icon">🧪</div>
+                  <p class="findings-empty-title" style="font-weight:600; margin-bottom:.35rem;">No Lab Report Uploaded
+                    Yet</p>
+                  <p class="findings-empty" style="font-size:.82rem;">Upload a PDF or image on the left and click
+                    <strong>Analyse Report</strong> to view structured extracted values here.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Empty State (when no report parsed yet) -->
+          <div class="idle-state" id="labIdle">
+            <div class="idle-icon">🧪</div>
+            <p class="idle-text">No lab report analysed yet. Select or drop a lab-report PDF or image above and click
+              <strong>Analyse Report</strong> to review extracted findings.</p>
+          </div>
+
+          <!-- Results Container (hidden until parsed) -->
+          <div class="lab-results hidden" id="labResults">
+
+            <!-- OCR notice -->
+            <div class="ocr-notice hidden" id="ocrNotice">
+              <span>🔬</span>
+              <span id="ocrNoticeText"></span>
+            </div>
+
+            <!-- Warnings block -->
+            <div class="warnings-block hidden" id="labWarnings"></div>
+
+            <!-- Raw text accordion -->
+            <details class="raw-text-accordion" id="rawTextAccordion">
+              <summary class="raw-text-toggle">📃 Show Extracted Raw Text</summary>
+              <pre class="raw-text-body" id="rawTextBody"></pre>
+            </details>
+
+            <!-- Structured table -->
+            <div class="table-section">
+              <h2 class="section-title">Structured Results Table</h2>
+              <p class="section-desc">
+                Review these rows against your original report before acting on any value.
+                Fields marked <em>"Please check the original report."</em> could not be reliably extracted.
+              </p>
+              <div class="table-wrapper" role="region" aria-label="Lab results table" tabindex="0">
+                <table class="lab-table" id="labTable">
+                  <thead>
+                    <tr>
+                      <th>Test Name</th>
+                      <th>Value</th>
+                      <th>Unit</th>
+                      <th>Reference Range</th>
+                      <th>Flag</th>
+                      <th>Plain Explanation</th>
+                    </tr>
+                  </thead>
+                  <tbody id="labTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════
+           SECTION — Chest X-Ray (Upload & TB Baseline)
+      ══════════════════════════════════════════════════ -->
+      <section class="panel" id="panel-xray" aria-label="Chest X-Ray Upload and TB Model Output">
+        <div class="panel-header">
+          <h1 class="panel-title">Chest X-Ray Baseline Model</h1>
+        </div>
+
+        <div class="panel-body">
+
+          <!-- Split Row: Upload Chest X-Ray Image + Model Output side by side -->
+          <div class="split-row">
+            <!-- X-Ray Upload Card -->
+            <div class="upload-card" id="xrayCard">
+              <div class="upload-card-header">
+                <span class="upload-icon">🫁</span>
+                <div>
+                  <h2 class="upload-card-title">Upload Chest X-Ray Image</h2>
+                  <p class="upload-card-sub">PNG / JPEG · Max 10 MB · RAM Only</p>
+                </div>
+              </div>
+
+              <div class="drop-zone" id="xrayDropZone" role="region" aria-label="X-ray drop zone" tabindex="0">
+                <div class="drop-zone-inner" id="xrayDropInner">
+                  <div class="drop-icon">🫁</div>
+                  <p class="drop-text">Drag &amp; drop an X-ray image here</p>
+                  <p class="drop-sub">or</p>
+                  <label class="btn btn-primary" for="xrayFileInput" id="xrayFileLabel">
+                    Choose File
+                    <input type="file" id="xrayFileInput" accept=".png,.jpg,.jpeg"
+                      aria-label="Choose X-ray image file" />
+                  </label>
+                </div>
+                <div class="drop-zone-preview hidden" id="xrayPreview">
+                  <div class="preview-info">
+                    <img class="preview-thumb" id="xrayThumb" src="" alt="X-ray thumbnail" />
+                    <div>
+                      <p class="preview-name" id="xrayPreviewName">—</p>
+                      <p class="preview-size" id="xrayPreviewSize">—</p>
+                    </div>
+                  </div>
+                  <div class="preview-actions">
+                    <button type="button" class="btn btn-primary" id="xrayAnalyseBtn">🔍 Analyse X-Ray</button>
+                    <button type="button" class="btn btn-ghost" id="xrayClearBtn">✕ Clear</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="upload-status hidden" id="xrayStatus">
+                <div class="progress-bar">
+                  <div class="progress-fill" id="xrayProgress"></div>
+                </div>
+                <p class="upload-status-text" id="xrayStatusText">Uploading…</p>
+              </div>
+
+              <!-- Recoverable Error Box -->
+              <div class="recoverable-error-box hidden" id="xrayErrorBox">
+                <div class="recoverable-error-header">⚠️ <span id="xrayErrorTitle">Upload Error</span></div>
+                <p class="recoverable-error-body" id="xrayErrorMsg"></p>
+                <div class="recoverable-error-actions">
+                  <button type="button" class="btn btn-sm btn-ghost" id="xrayRetryBtn">✕ Clear &amp; Try Another
+                    Image</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Model Output Card (Side by side with Upload) -->
+            <div class="findings-card side-facts-card" id="sideXrayOutputCard">
+              <div class="findings-card-title-row"
+                style="display:flex; justify-content:space-between; align-items:center; padding:.85rem 1.2rem; background:var(--bg-card-hi); border-bottom:1px solid var(--border);">
+                <h2 class="findings-card-title"
+                  style="margin:0; padding:0; background:none; border:none; font-size:.9rem;">🫁 Model Output (Source:
+                  Pretrained ResNet18 Baseline)</h2>
+                <span class="badge"
+                  style="font-size:.72rem; background:rgba(245,158,11,0.15); color:var(--amber);">Non-Diagnostic
+                  Score</span>
+              </div>
+              <div class="findings-card-body" id="sideXrayOutputBody">
+                <div class="findings-empty-wrap">
+                  <div class="findings-empty-icon">🫁</div>
+                  <p class="findings-empty-title" style="font-weight:600; margin-bottom:.35rem;">No Chest X-Ray
+                    Evaluated Yet</p>
+                  <p class="findings-empty" style="font-size:.82rem;">Upload an image on the left or select a verified
+                    sample below to view screening model outputs here.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Interactive TB Screening Demo Section -->
+          <div class="screening-demo-section" id="screeningDemoSection">
+            <h3 class="section-title">Interactive TB Screening Demo</h3>
+            <p class="section-desc">
+              Select a verified image from the dataset or upload a chest X-ray to test the ResNet18 baseline model in
+              real time.
+            </p>
+
+            <div class="sample-picker">
+              <span class="picker-label">Pick a verified dataset sample:</span>
+              <div class="sample-btn-group" id="sampleBtnGroup">
+                <button type="button" class="btn btn-sm btn-ghost sample-btn"
+                  data-path="data/raw/TB_Chest_Radiography_Database/Normal/Normal-1.png"
+                  data-name="Normal-1 (Normal)">Normal-1</button>
+                <button type="button" class="btn btn-sm btn-ghost sample-btn"
+                  data-path="data/raw/TB_Chest_Radiography_Database/Normal/Normal-25.png"
+                  data-name="Normal-25 (Normal)">Normal-25</button>
+                <button type="button" class="btn btn-sm btn-ghost sample-btn"
+                  data-path="data/raw/TB_Chest_Radiography_Database/Normal/Normal-100.png"
+                  data-name="Normal-100 (Normal)">Normal-100</button>
+                <button type="button" class="btn btn-sm btn-ghost sample-btn btn-tb-sample"
+                  data-path="data/raw/TB_Chest_Radiography_Database/Tuberculosis/Tuberculosis-1.png"
+                  data-name="Tuberculosis-1 (TB)">Tuberculosis-1</button>
+                <button type="button" class="btn btn-sm btn-ghost sample-btn btn-tb-sample"
+                  data-path="data/raw/TB_Chest_Radiography_Database/Tuberculosis/Tuberculosis-15.png"
+                  data-name="Tuberculosis-15 (TB)">Tuberculosis-15</button>
+                <button type="button" class="btn btn-sm btn-ghost sample-btn btn-tb-sample"
+                  data-path="data/raw/TB_Chest_Radiography_Database/Tuberculosis/Tuberculosis-50.png"
+                  data-name="Tuberculosis-50 (TB)">Tuberculosis-50</button>
+              </div>
+            </div>
+
+            <!-- Screening Output Card -->
+            <div class="screening-output hidden" id="screeningOutput">
+              <div class="screening-card-grid">
+                <div class="screening-img-wrap">
+                  <img id="screeningImg" src="" alt="Selected Chest X-ray" />
+                  <span class="screening-img-caption" id="screeningImgCaption">—</span>
+                </div>
+                <div class="screening-results-wrap">
+                  <div class="score-badge-row">
+                    <span class="badge" id="screeningBadge">Analysis Pending</span>
+                    <span class="screening-model-tag">ResNet18 Baseline</span>
+                  </div>
+
+                  <div class="score-display">
+                    <span class="score-label">Experimental TB Screening Score:</span>
+                    <div class="score-number-row">
+                      <span class="score-value" id="screeningScoreVal">—</span>
+                      <span class="score-denom">/ 1.00</span>
+                    </div>
+                    <p class="score-sub" id="screeningScoreDesc">—</p>
+                  </div>
+
+                  <!-- Probability Gauge Bar -->
+                  <div class="prob-bar-wrapper">
+                    <div class="prob-bar-labels">
+                      <span>Normal: <strong id="probNormalVal">—</strong></span>
+                      <span>TB-Consistent: <strong id="probTbVal">—</strong></span>
+                    </div>
+                    <div class="prob-bar-track">
+                      <div class="prob-bar-fill" id="probBarFill"></div>
+                    </div>
+                    <div class="prob-bar-ticks">
+                      <span>0.0 (Normal)</span>
+                      <span>Threshold: 0.50</span>
+                      <span>1.0 (TB)</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════
+           SECTION — Symptom Recording & Analysis (Voice & Text)
+      ══════════════════════════════════════════════════ -->
+      <section class="panel" id="panel-notes" aria-label="Symptom Recording">
+        <div class="panel-header">
+          <h1 class="panel-title">Symptom Recording</h1>
+        </div>
+
+        <div class="panel-body">
+
+
+          <!-- Merged Record Symptom Hub -->
+          <div class="voice-entry-card" id="voiceEntryCard">
+            <div class="voice-card-header">
+              <div class="voice-card-title-col">
+                <h2 class="voice-card-title" style="margin:0;">Record Symptom</h2>
+              </div>
+
+              <!-- Language Switcher for Voice Typing -->
+              <div class="voice-lang-switcher" role="radiogroup" aria-label="Voice typing language">
+                <span class="voice-lang-label">Language:</span>
+                <button type="button" class="lang-pill active" id="voiceTypeLangEn" data-lang="en-US"
+                  title="Voice typing in English">🇬🇧 English</button>
+                <button type="button" class="lang-pill" id="voiceTypeLangHi" data-lang="hi-IN"
+                  title="हिंदी में बोलकर दर्ज करें">🇮🇳 हिंदी</button>
+              </div>
+            </div>
+
+            <!-- Notes Dialog Box with Microphone in Corner -->
+            <div class="notes-wrapper" style="position: relative; margin-top: 1rem;">
+              <textarea id="symptomNotes" class="notes-textarea" maxlength="2000"
+                placeholder="Type your symptoms here or click the microphone in the corner to speak naturally..."
+                aria-label="User-entered symptom notes"></textarea>
+              <!-- Microphone Button within Dialog Box Corner -->
+              <button type="button" class="textarea-mic-btn" id="voiceTypeMicBtn"
+                title="Click to speak symptoms (Voice Typing)" aria-label="Voice typing microphone">
+                <span class="mic-icon" id="micBtnIcon">🎙️</span>
+              </button>
+            </div>
+
+            <!-- Listening indicator badge -->
+            <div class="listening-badge hidden" id="listeningBadge" style="margin-top: 0.5rem;">
+              <span class="pulsing-mic-dot"></span>
+              <span id="listeningText">Listening… speak your symptoms now</span>
+            </div>
+
+            <!-- Action Row below Dialog Box -->
+            <div class="notes-actions-row"
+              style="display:flex; justify-content:space-between; align-items:center; margin-top: 0.75rem; flex-wrap: wrap; gap: 0.6rem;">
+              <div style="display:flex; gap: 0.6rem; align-items:center; flex-wrap: wrap;">
+                <button type="button" class="btn btn-primary" id="separateSymptomsBtn"
+                  title="Separate symptoms mentioned in the notes into cards">
+                  📑 Separate Symptoms from Notes
+                </button>
+                <button type="button" class="btn btn-sm btn-ghost" id="clearNotesBtn" title="Clear notes">
+                  ✕ Clear Notes
+                </button>
+              </div>
+              <div style="display:flex; align-items:center; gap: 0.75rem;">
+                <span style="font-size: 0.76rem; color: var(--text-faint);">Processed in local RAM only</span>
+                <p class="char-count" style="margin: 0; font-size: 0.78rem; color: var(--text-muted);"><span
+                    id="charCount">0</span> / 2000</p>
+              </div>
+            </div>
+
+            <!-- Quick Add Symptom Pills -->
+            <div class="quick-pills-section"
+              style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+              <span class="quick-pills-label">Quick-add common symptoms:</span>
+              <div class="quick-pills-row">
+                <button type="button" class="quick-symptom-pill" data-symptom="Persistent dry cough">➕ Dry
+                  Cough</button>
+                <button type="button" class="quick-symptom-pill" data-symptom="Productive cough with sputum">➕
+                  Productive Cough</button>
+                <button type="button" class="quick-symptom-pill" data-symptom="High fever and chills">➕ Fever</button>
+                <button type="button" class="quick-symptom-pill pill-alert"
+                  data-symptom="Shortness of breath (Dyspnea)">➕ Shortness of Breath ⚠️</button>
+                <button type="button" class="quick-symptom-pill" data-symptom="Fatigue and generalized weakness">➕
+                  Fatigue</button>
+                <button type="button" class="quick-symptom-pill pill-alert" data-symptom="Chest pain and tightness">➕
+                  Chest Pain ⚠️</button>
+                <button type="button" class="quick-symptom-pill" data-symptom="Drenching night sweats">➕ Night
+                  Sweats</button>
+                <button type="button" class="quick-symptom-pill pill-alert" data-symptom="Coughing blood (Hemoptysis)">➕
+                  Coughing Blood 🚨</button>
+                <button type="button" class="quick-symptom-pill"
+                  data-symptom="Unexplained weight loss and poor appetite">➕ Loss of Appetite</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Bar to Analyze Symptoms -->
+          <div class="symptom-action-bar" style="margin-top: 1.25rem; display:flex; align-items:center; gap: 1rem;">
+            <button type="button" class="btn btn-accent btn-lg" id="analyzeSymptomsBtn">
+              🔬 Analyse Recorded Symptoms
+            </button>
+            <span class="analysis-status-text" id="analysisStatusText"></span>
+          </div>
+
+          <!-- Clinical Symptom Analysis Results Card (Hidden until analyzed) -->
+          <div class="symptom-analysis-card hidden" id="symptomAnalysisCard" style="margin-top: 1.5rem;">
+            <div class="analysis-card-header">
+              <div class="analysis-card-title-col">
+                <span class="analysis-badge">📋 Clinical Categorization</span>
+                <h3 class="analysis-title">Physiological Domain Breakdown &amp; Red-Flag Screen</h3>
+                <p class="analysis-sub">Symptoms structured into standard anatomical systems to organize clinical
+                  findings for your doctor.</p>
+              </div>
+              <div class="analysis-metrics-summary" id="analysisMetricsSummary">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- Red-Flag Warning Banner (if detected) -->
+            <div class="red-flag-banner hidden" id="redFlagBanner" role="alert">
+              <div class="rf-icon">🚨</div>
+              <div class="rf-content">
+                <h4 class="rf-title">Critical Clinical Warning: Potential Red-Flag Symptoms Detected</h4>
+                <p class="rf-desc" id="redFlagDesc">One or more recorded symptoms (e.g. shortness of breath, chest pain,
+                  hemoptysis) may indicate conditions requiring prompt medical evaluation. Seek immediate healthcare
+                  consultation.</p>
+                <div class="rf-tags-list" id="redFlagTagsList"></div>
+              </div>
+            </div>
+
+            <!-- Physiological Domains Grid -->
+            <div class="domains-grid" id="domainsGrid">
+              <!-- Populated dynamically: Respiratory, Constitutional, Cardiovascular, GI/Other -->
+            </div>
+
+            <!-- Doctor Consultation Discussion Points -->
+            <div class="doctor-points-card">
+              <div class="dp-header">
+                <span class="dp-icon">🩺</span>
+                <h4 class="dp-title">Suggested Talking Points for Your Physician Consultation</h4>
+              </div>
+              <ul class="dp-list" id="doctorPointsList">
+                <!-- Populated dynamically -->
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════
+           SECTION — Findings Summary & Voice Assistant
+      ══════════════════════════════════════════════════ -->
+      <section class="panel" id="panel-findings" aria-label="Combined Findings Summary & Voice Assistant">
+        <div class="panel-header">
+          <h1 class="panel-title">Findings Summary &amp; Voice Assistant</h1>
+        </div>
+
+        <div class="panel-body">
+
+
+          <!-- ══════════════════════════════════════════════════
+               VOICE ASSISTANT CARD (Bilingual: English & Hindi)
+          ══════════════════════════════════════════════════ -->
+          <div class="voice-assistant-card" id="voiceAssistantCard">
+            <div class="va-header">
+              <div class="va-title-col">
+                <div class="va-badge">🎙️ Interactive Report Audio Assistant</div>
+                <h2 class="va-title">Summary Report Voice Walkthrough</h2>
+                <p class="va-subtitle">Listen to a natural audio overview of your lab report facts, chest X-ray
+                  screening baseline score, and recorded symptoms.</p>
+              </div>
+
+              <!-- Language Selection: English & Hindi -->
+              <div class="va-lang-toggle" role="radiogroup" aria-label="Voice Assistant Language">
+                <button type="button" class="va-lang-btn active" id="vaLangEn" data-lang="en-US">
+                  🇬🇧 English Voice
+                </button>
+                <button type="button" class="va-lang-btn" id="vaLangHi" data-lang="hi-IN">
+                  🇮🇳 हिंदी वॉयस (Hindi)
+                </button>
+              </div>
+            </div>
+
+            <div class="va-body">
+              <!-- Playback Controls Row -->
+              <div class="va-controls-row">
+                <button type="button" class="btn btn-primary va-play-btn" id="vaPlayBtn">
+                  <span class="play-icon" id="vaPlayIcon">▶️</span>
+                  <span id="vaPlayLabel">Read Report Aloud</span>
+                </button>
+
+                <button type="button" class="btn btn-ghost va-ctrl-btn" id="vaPauseBtn" disabled title="Pause speech">
+                  ⏸️ Pause
+                </button>
+
+                <button type="button" class="btn btn-ghost va-ctrl-btn" id="vaStopBtn" disabled title="Stop playback">
+                  ⏹️ Stop
+                </button>
+
+                <!-- Voice Speed Selector -->
+                <div class="va-speed-group" role="group" aria-label="Playback speed">
+                  <span class="speed-label">Speed:</span>
+                  <button type="button" class="speed-pill" data-speed="0.85">0.85x</button>
+                  <button type="button" class="speed-pill active" data-speed="1.0">1.0x</button>
+                  <button type="button" class="speed-pill" data-speed="1.2">1.2x</button>
+                </div>
+
+                <!-- Status Indicator -->
+                <div class="va-status-wrap">
+                  <span class="va-status-dot" id="vaStatusDot"></span>
+                  <span class="va-status-text" id="vaStatusText">Ready to speak</span>
+                </div>
+              </div>
+
+              <!-- Animated Equalizer Waveform -->
+              <div class="va-visualizer" id="vaVisualizer" aria-hidden="true">
+                <div class="va-wave-bar"></div>
+                <div class="va-wave-bar"></div>
+                <div class="va-wave-bar"></div>
+                <div class="va-wave-bar"></div>
+                <div class="va-wave-bar"></div>
+                <div class="va-wave-bar"></div>
+                <div class="va-wave-bar"></div>
+                <div class="va-wave-bar"></div>
+              </div>
+
+              <!-- Spoken Script Transcript Accordion -->
+              <details class="va-transcript-accordion" id="vaTranscriptAccordion" open>
+                <summary class="va-transcript-toggle">
+                  📝 Spoken Narrative Script (<span id="vaTranscriptLangLabel">English</span>)
+                </summary>
+                <div class="va-transcript-content" id="vaTranscriptContent">
+                  <em>Click "Read Report Aloud" or switch languages to preview and hear the personalized diagnostic
+                    walkthrough script…</em>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <!-- ══════════════════════════════════════════════════
+               HEALTH RISK METER (Post-Summary Risk Evaluation)
+          ══════════════════════════════════════════════════ -->
+          <div class="risk-meter-container" id="riskMeterContainer" aria-label="Health Risk Evaluation Meter">
+            <div class="risk-meter-header">
+              <div class="risk-meter-badge-row">
+                <span class="risk-meter-badge">⚖️ Diagnostic Risk Meter</span>
+                <span class="risk-status-pill neutral" id="riskStatusPill">Awaiting Data</span>
+              </div>
+              <h2 class="risk-meter-title">Overall Health Risk Meter</h2>
+              <p class="risk-meter-subtitle">Synthesized evaluation of uploaded lab reports, chest screening baseline
+                score, and recorded symptoms.</p>
+            </div>
+
+            <div class="risk-meter-content">
+              <!-- Visual Speedometer Gauge Card -->
+              <div class="risk-gauge-card">
+                <div class="risk-gauge-wrap">
+                  <svg class="risk-gauge-svg" viewBox="0 0 240 140" aria-label="Health Risk Level Gauge">
+                    <defs>
+                      <linearGradient id="riskGaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#02c39a" />
+                        <stop offset="35%" stop-color="#00a896" />
+                        <stop offset="65%" stop-color="#f0f3bd" />
+                        <stop offset="85%" stop-color="#f59e0b" />
+                        <stop offset="100%" stop-color="#f87171" />
+                      </linearGradient>
+                    </defs>
+                    <!-- Background Track -->
+                    <path d="M 30 120 A 90 90 0 0 1 210 120" fill="none" stroke="rgba(255,255,255,0.08)"
+                      stroke-width="16" stroke-linecap="round" class="gauge-bg-track" />
+                    <!-- Gradient Colored Track -->
+                    <path d="M 30 120 A 90 90 0 0 1 210 120" fill="none" stroke="url(#riskGaugeGrad)" stroke-width="16"
+                      stroke-linecap="round" class="gauge-color-track" />
+                    <!-- Animated Needle -->
+                    <g id="gaugeNeedleGroup" transform="rotate(-90, 120, 120)">
+                      <polygon points="117,120 123,120 121,38 119,38" fill="#ffffff" class="gauge-needle" />
+                      <circle cx="120" cy="120" r="9" fill="#00a896" stroke="#ffffff" stroke-width="2.5"
+                        class="gauge-center-cap" />
+                    </g>
+                    <!-- Scale Text -->
+                    <text x="32" y="136" class="gauge-scale-lbl" text-anchor="middle">Normal</text>
+                    <text x="120" y="24" class="gauge-scale-lbl" text-anchor="middle">Moderate</text>
+                    <text x="208" y="136" class="gauge-scale-lbl" text-anchor="middle">High Risk</text>
+                  </svg>
+
+                  <div class="risk-score-display">
+                    <span class="risk-score-num" id="riskScoreNum">0%</span>
+                    <span class="risk-score-label" id="riskScoreLabel">Calculated Risk</span>
+                  </div>
+                </div>
+
+                <div class="risk-meter-legend">
+                  <div class="legend-item"><span class="legend-dot normal"></span> Normal (0–34%)</div>
+                  <div class="legend-item"><span class="legend-dot moderate"></span> Moderate (35–64%)</div>
+                  <div class="legend-item"><span class="legend-dot high"></span> High Risk (65–100%)</div>
+                </div>
+              </div>
+
+              <!-- Recommendation Card -->
+              <div class="risk-advice-card neutral" id="riskAdviceCard">
+                <div class="risk-advice-header">
+                  <span class="risk-advice-icon" id="riskAdviceIcon">🌱</span>
+                  <div class="risk-advice-title-wrap">
+                    <h3 class="risk-advice-title" id="riskAdviceTitle">Awaiting Assessment Data</h3>
+                    <div class="risk-advice-sub" id="riskAdviceSub">Upload a lab report, chest X-ray, or enter symptom
+                      notes to calculate unified health risk.</div>
+                  </div>
+                </div>
+
+                <div class="risk-advice-message-box neutral" id="riskAdviceMessageBox">
+                  <div class="risk-main-action">Awaiting diagnostic inputs</div>
+                  <p class="risk-sub-action">Upload your medical documents or enter symptom notes above to evaluate
+                    potential health risks.</p>
+                </div>
+
+                <!-- Evaluated Health Factors -->
+                <div class="risk-factors-wrap" id="riskFactorsWrap" style="display: none;">
+                  <div class="risk-factors-heading">Evaluated Health Factors:</div>
+                  <ul class="risk-factors-list" id="riskFactorsList"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Citations & Dataset Attribution -->
+          <div class="citations-card">
+            <h3 class="section-title">📚 Citations &amp; Dataset Attributions</h3>
+            <div class="citations-list">
+              <div class="citation-item">
+                <div class="citation-title">NLM Montgomery &amp; Shenzhen Chest X-Ray Datasets</div>
+                <div class="citation-meta">
+                  Jaeger S, Karargyris A, Candemir S, Folio L, Siegelman J, Callaghan F, Xue Z, Dang C, Chou P,
+                  Prevedello LM, Lu PX, Antani S.
+                  <em>"Two public chest X-ray datasets for computer-aided screening of pulmonary diseases."</em>
+                  Quantitative Imaging in Medicine and Surgery, 2014;4(6):475-477.
+                  Collaboration between Shenzhen No. 3 People's Hospital (Guangdong, China) and National Library of
+                  Medicine (NIH, USA).
+                </div>
+              </div>
+              <div class="citation-item">
+                <div class="citation-title">TB Chest Radiography Database</div>
+                <div class="citation-meta">
+                  Rahman T, Khandakar A, Kadir MA, Islam KR, Islam KF, Mazhar R, Hamid T, Islam MT, Kashem S, Mahbub ZB,
+                  Ayari MA, Chowdhury MEH.
+                  <em>"Reliable Tuberculosis Detection using Chest X-ray with Deep Learning, Segmentation and
+                    Visualization."</em>
+                  IEEE Access, 2020;8:191586-191601.
+                </div>
+              </div>
+              <div class="citation-item">
+                <div class="citation-title">Sample Laboratory Report &amp; Adult Reference Intervals</div>
+                <div class="citation-meta">
+                  Synthetic test PDF and comparative intervals derived from standard adult clinical pathology reference
+                  intervals (e.g. Tietz Textbook of Clinical Chemistry). Provided for non-clinical research and pair
+                  programming development only.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-nav-row" style="margin-top:2.5rem">
+            <button type="button" class="btn btn-secondary" id="backToTopBtn">↑ Back to Top (Lab Report)</button>
+          </div>
+
+        </div>
+      </section>
+
+    </main><!-- /main-content -->
+  </div><!-- /app-shell -->
+
+  <!-- ═══════════════════════════════════════════════════════
+       SETTINGS MODAL DIALOG (Future Scope, Dataset & Theme)
+  ═══════════════════════════════════════════════════════ -->
+  <div class="modal-backdrop" id="settingsModalBackdrop" hidden>
+    <div class="settings-modal" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="modalActiveTitle">
+      <div class="modal-header">
+        <div class="modal-tabs" role="tablist">
+          <button type="button" class="modal-tab-btn active" data-target-tab="future-scope" id="tabBtnFutureScope"
+            role="tab" aria-selected="true">
+            <span class="tab-icon">✨</span>
+            <span>Future scope</span>
+          </button>
+          <button type="button" class="modal-tab-btn" data-target-tab="dataset" id="tabBtnDataset" role="tab"
+            aria-selected="false">
+            <span class="tab-icon">📂</span>
+            <span>Dataset</span>
+          </button>
+          <button type="button" class="modal-tab-btn" data-target-tab="theme" id="tabBtnTheme" role="tab"
+            aria-selected="false">
+            <span class="tab-icon">🎨</span>
+            <span>Theme</span>
+          </button>
+        </div>
+        <button type="button" class="modal-close-btn" id="settingsModalClose"
+          aria-label="Close settings dialog">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- ── TAB 1: Future Scope (Active Features & Prototype Scope) ── -->
+        <div class="modal-tab-pane active" id="paneFutureScope" role="tabpanel">
+          <div class="pane-header-box">
+            <h3 class="section-title" id="modalActiveTitle" style="margin:0 0 .35rem 0;">✨ Active Features &amp;
+              Prototype Scope</h3>
+            <p class="section-desc">Active system capabilities and verified boundaries in this version:</p>
+          </div>
+          <div class="deferred-grid" style="margin-top:1.25rem;">
+            <div class="deferred-item" style="border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.06);">
+              <span style="color:var(--text); font-weight:600;">🎙️ Summary Voice Assistant (EN / HI)</span>
+              <span class="badge badge-green" style="font-size:.68rem;">Active</span>
+            </div>
+            <div class="deferred-item" style="border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.06);">
+              <span style="color:var(--text); font-weight:600;">🗣️ Symptom Voice Typing (EN / HI)</span>
+              <span class="badge badge-green" style="font-size:.68rem;">Active</span>
+            </div>
+            <div class="deferred-item" style="border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.06);">
+              <span style="color:var(--text); font-weight:600;">🩺 Symptom Domain Separation &amp; Red Flags</span>
+              <span class="badge badge-green" style="font-size:.68rem;">Active</span>
+            </div>
+            <div class="deferred-item"><span>Knowledge graph mapping</span><span class="deferred-badge">Deferred</span>
+            </div>
+            <div class="deferred-item"><span>Cross-modal clinical risk scoring</span><span
+                class="deferred-badge">Deferred</span></div>
+            <div class="deferred-item"><span>Heatmap explanations (Grad-CAM)</span><span
+                class="deferred-badge">Deferred</span></div>
+            <div class="deferred-item"><span>Automated specialist routing</span><span
+                class="deferred-badge">Deferred</span></div>
+            <div class="deferred-item"><span>Medication safety alerts</span><span class="deferred-badge">Deferred</span>
+            </div>
+            <div class="deferred-item"><span>Diabetic retinopathy &amp; oral screening</span><span
+                class="deferred-badge">Deferred</span></div>
+          </div>
+        </div>
+
+        <!-- ── TAB 2: Dataset (Local Dataset Status & Privacy Verification) ── -->
+        <div class="modal-tab-pane" id="paneDataset" role="tabpanel">
+          <div class="info-card" style="margin-top:0; border:none; background:transparent; padding:0; box-shadow:none;">
+            <div
+              style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.75rem; flex-wrap:wrap; gap:.5rem;">
+              <div>
+                <h2 class="info-card-title" style="margin:0 0 .2rem 0;">📂 Local Dataset Status &amp; Privacy
+                  Verification</h2>
+                <span class="section-desc" style="font-size:.78rem;">Status of bundled datasets and local privacy
+                  protections:</span>
+              </div>
+              <button type="button" class="btn btn-sm btn-primary" id="refreshDatasetBtn">🔄 Refresh Status</button>
+            </div>
+            <div id="datasetStatusGrid" class="ds-grid"></div>
+            <div class="privacy-table" style="margin-top:1.25rem;">
+              <div class="privacy-row"><span class="privacy-label">No external transmission</span><span
+                  class="privacy-val">Flask binds to 127.0.0.1 only</span></div>
+              <div class="privacy-row"><span class="privacy-label">No persistence</span><span class="privacy-val">Files
+                  processed in RAM; immediately discarded</span></div>
+              <div class="privacy-row"><span class="privacy-label">No personal data</span><span class="privacy-val">No
+                  names, DOBs, or identifiers stored</span></div>
+              <div class="privacy-row"><span class="privacy-label">No telemetry</span><span class="privacy-val">No
+                  analytics or remote tracking</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TAB 3: Theme Mode Selection ── -->
+        <div class="modal-tab-pane" id="paneTheme" role="tabpanel">
+          <div class="pane-header-box">
+            <h3 class="section-title" style="margin:0 0 .35rem 0;">🎨 Theme Mode &amp; Appearance</h3>
+            <p class="section-desc">Select your preferred user interface color scheme:</p>
+          </div>
+          <div class="theme-cards-grid">
+            <div class="theme-choice-card" data-theme-choice="dark" id="themeCardDark" tabindex="0" role="button">
+              <div class="theme-preview-box dark-preview">
+                <div class="preview-header"></div>
+                <div class="preview-content">
+                  <div class="preview-line"></div>
+                  <div class="preview-line short"></div>
+                </div>
+              </div>
+              <div class="theme-choice-info">
+                <span class="theme-choice-name">🌙 Midnight Indigo (Dark)</span>
+                <span class="theme-choice-desc">Deep midnight navy (#0F0E47), deep indigo (#272757) with slate lavender
+                  (#8686AC) &amp; light-green accents</span>
+              </div>
+              <span class="theme-active-tag">Active</span>
+            </div>
+            <div class="theme-choice-card active" data-theme-choice="light" id="themeCardLight" tabindex="0" role="button">
+              <div class="theme-preview-box light-preview">
+                <div class="preview-header"></div>
+                <div class="preview-content">
+                  <div class="preview-line"></div>
+                  <div class="preview-line short"></div>
+                </div>
+              </div>
+              <div class="theme-choice-info">
+                <span class="theme-choice-name">☀️ Azure Ice &amp; Slate (Light)</span>
+                <span class="theme-choice-desc">Crisp ice mist (#BDDDFC), azure (#88BDF2), steel slate (#6A89A7), dark
+                  charcoal (#384959) &amp; high-contrast black text</span>
+              </div>
+              <span class="theme-active-tag">Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SMART HYBRID MEDICAL CHATBOT WIDGET
+  ═══════════════════════════════════════════════════════ -->
+  <!-- Floating Trigger Button -->
+  <button type="button" class="chatbot-trigger-btn" id="chatToggleBtn" aria-label="Chat with Vida"
+    title="Chat with Vida (Medical Assistant)">
+    <div class="chat-trigger-icon-wrap">
+      <span class="chat-icon-main">🩺</span>
+      <span class="chat-sparkle">✨</span>
+    </div>
+    <span class="chat-trigger-text">Vida</span>
+    <span class="chat-unread-dot" id="chatUnreadDot"></span>
+  </button>
+
+  <!-- Floating Chatbot Window / Drawer -->
+  <aside class="chatbot-window" id="chatWindow" role="dialog" aria-label="Vida - Medical AI Assistant" hidden>
+    <!-- Header -->
+    <header class="chat-header">
+      <div class="chat-header-info">
+        <div class="chat-avatar">🩺</div>
+        <div>
+          <div class="chat-title-row">
+            <h3 class="chat-title">Vida</h3>
+            <span class="chat-engine-badge" id="chatEngineBadge"
+              title="Smart Hybrid Engine: Built-in Clinical Analyzer + Optional Cloud LLM">
+              <span class="badge-dot"></span>
+              <span id="chatEngineText">Clinical Engine</span>
+            </span>
+          </div>
+          <div class="chat-subtitle">Medical Assistant · Session Analyzer</div>
+        </div>
+      </div>
+      <div class="chat-header-actions">
+        <button type="button" class="chat-action-btn" id="chatVoiceToggleBtn"
+          title="Auto-Voice Output: OFF (Click to Enable)" aria-label="Toggle Auto-Voice">🔇</button>
+        <button type="button" class="chat-action-btn" id="chatClearBtn" title="Clear Chat History"
+          aria-label="Clear Chat History">🗑️</button>
+        <button type="button" class="chat-action-btn" id="chatCloseBtn" title="Minimize Chat"
+          aria-label="Minimize Chat">✕</button>
+      </div>
+    </header>
+
+
+    <!-- Message Area -->
+    <div class="chat-body" id="chatMessages" role="log" aria-live="polite">
+      <!-- Quick Prompt Suggestions Chips -->
+      <div class="chat-suggestions" id="chatSuggestions">
+        <span class="suggestions-label">💡 Suggested Questions:</span>
+        <div class="suggestions-grid">
+          <button type="button" class="chip-btn" data-query="Explain my lab results">🧪 Explain my lab results</button>
+          <button type="button" class="chip-btn" data-query="What does my X-ray score mean?">🫁 What does my X-ray score
+            mean?</button>
+          <button type="button" class="chip-btn" data-query="Review my symptoms">📝 Review my symptoms</button>
+          <button type="button" class="chip-btn" data-query="What is Tuberculosis?">🔬 What is Tuberculosis?</button>
+          <button type="button" class="chip-btn" data-query="When to see a doctor?">🚨 When to see a doctor?</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input Footer -->
+    <footer class="chat-footer">
+      <form class="chat-input-form" id="chatForm">
+        <input type="text" id="chatInput" class="chat-input" placeholder="Ask about your results or medical questions…"
+          autocomplete="off" required />
+        <button type="submit" class="chat-send-btn" id="chatSendBtn" aria-label="Send message">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </form>
+    </footer>
+  </aside>
+
+  <!-- Client-Side Document Engines (Browser Wasm & Web Workers) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="client_parser.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

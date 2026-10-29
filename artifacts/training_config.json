@@ -1,0 +1,64 @@
+{
+  "architecture": "resnet18",
+  "epochs": 3,
+  "batch_size": 32,
+  "learning_rate": 0.0001,
+  "seed": 42,
+  "input_resolution": [
+    224,
+    224
+  ],
+  "device": "cpu",
+  "dataset_total": 4200,
+  "dataset_normal": 3500,
+  "dataset_tb": 700,
+  "split": {
+    "train_count": 2940,
+    "val_count": 630,
+    "test_count": 630
+  },
+  "sample_limit": null,
+  "training_duration_seconds": 1526.6,
+  "class_mapping": {
+    "0": "Normal",
+    "1": "TB-consistent findings"
+  },
+  "patient_grouping_limitation": "Patient grouping cannot be established: neither filenames nor dataset metadata (Normal.metadata.xlsx, Tuberculosis.metadata.xlsx) contain patient identifiers or visit groupings. Evaluation is strictly at the image level; do NOT claim independent patient-level evaluation.",
+  "clinical_disclaimer": "Experimental TB screening score only \u2014 NOT a medical diagnosis. This baseline model has not undergone external clinical validation and is not suitable for clinical care or diagnostic decision-making.",
+  "limitations": [
+    "Small single-source dataset (TB Chest Radiography Database).",
+    "Limited sites and populations; demographic diversity is not documented in metadata.",
+    "No external clinical validation performed.",
+    "Image-level evaluation only; patient grouping could not be established from dataset.",
+    "Experimental screening score only \u2014 NOT a diagnosis. Unsuitable for patient care."
+  ],
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.1162,
+      "train_acc": 0.9435,
+      "val_loss": 0.0239,
+      "val_acc": 0.9968,
+      "val_f1": 0.9905,
+      "time_sec": 435.1
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.0428,
+      "train_acc": 0.9871,
+      "val_loss": 0.015,
+      "val_acc": 0.9952,
+      "val_f1": 0.9858,
+      "time_sec": 446.2
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.0222,
+      "train_acc": 0.9956,
+      "val_loss": 0.0216,
+      "val_acc": 0.9952,
+      "val_f1": 0.9858,
+      "time_sec": 597.8
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "split_evaluated": "held_out_test",
+  "sample_count": 630,
+  "normal_count": 525,
+  "tb_count": 105,
+  "accuracy": 0.9952,
+  "sensitivity": 0.981,
+  "specificity": 0.9981,
+  "precision": 0.9904,
+  "f1": 0.9856,
+  "roc_auc": 0.9991,
+  "confusion_matrix": {
+    "tn": 524,
+    "fp": 1,
+    "fn": 2,
+    "tp": 103,
+    "labels": [
+      "Normal",
+      "TB-consistent findings"
+    ],
+    "matrix": [
+      [
+        524,
+        1
+      ],
+      [
+        2,
+        103
+      ]
+    ]
+  },
+  "disclaimer": "Experimental TB screening score only \u2014 NOT a medical diagnosis. This baseline model has not undergone external clinical validation and is not suitable for clinical care or diagnostic decision-making.",
+  "limitation": "Patient grouping cannot be established: neither filenames nor dataset metadata (Normal.metadata.xlsx, Tuberculosis.metadata.xlsx) contain patient identifiers or visit groupings. Evaluation is strictly at the image level; do NOT claim independent patient-level evaluation."
+}
