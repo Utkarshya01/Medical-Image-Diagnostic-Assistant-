@@ -37,3 +37,13 @@ recover_history.py
 *~
 .DS_Store
 Thumbs.db
+
+# Raw image training dataset (keeps curated sample demo images for UI)
+data/raw/TB_Chest_Radiography_Database/Normal/Normal-*.png
+!data/raw/TB_Chest_Radiography_Database/Normal/Normal-1.png
+!data/raw/TB_Chest_Radiography_Database/Normal/Normal-2.png
+!data/raw/TB_Chest_Radiography_Database/Normal/Normal-3.png
+data/raw/TB_Chest_Radiography_Database/Tuberculosis/Tuberculosis-*.png
+!data/raw/TB_Chest_Radiography_Database/Tuberculosis/Tuberculosis-1.png
+!data/raw/TB_Chest_Radiography_Database/Tuberculosis/Tuberculosis-2.png
+!data/raw/TB_Chest_Radiography_Database/Tuberculosis/Tuberculosis-3.png
