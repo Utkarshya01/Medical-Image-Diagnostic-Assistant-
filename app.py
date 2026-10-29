@@ -33,6 +33,16 @@ def create_app() -> Flask:
     # Register API blueprint
     app.register_blueprint(api)
 
+    # Warm up / preload PyTorch model in RAM at startup to avoid first-request timeout on Render
+    try:
+        from backend.xray_model import get_or_load_model
+        weights_path = os.path.join(os.path.dirname(__file__), "artifacts", "tb_xray_baseline.pt")
+        if os.path.isfile(weights_path):
+            get_or_load_model(weights_path)
+            print("[INFO] TB Chest X-ray model successfully preloaded into memory.")
+    except Exception as exc:
+        print(f"[WARN] Model warmup skipped or failed: {exc}")
+
     # Serve the SPA index for every non-API route
     @app.route("/", defaults={"path": ""})
     @app.route("/<path:path>")

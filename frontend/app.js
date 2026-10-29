@@ -23,6 +23,19 @@ function esc(s) {
   return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
+async function parseJsonResponse(res) {
+  const contentType = res.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    const text = await res.text().catch(() => "");
+    if (res.status === 502 || res.status === 503 || res.status === 504) {
+      throw new Error(`Server is warming up or temporarily busy (HTTP ${res.status}). Please wait 10-15 seconds and try again.`);
+    }
+    const cleanSnippet = text.replace(/<[^>]*>?/gm, "").trim().slice(0, 120);
+    throw new Error(`Server returned HTTP ${res.status}${cleanSnippet ? `: ${cleanSnippet}` : ""}`);
+  }
+  return await res.json();
+}
+
 /* ─────────────────────────────────────────────────────────────
    Application State
 ───────────────────────────────────────────────────────────── */
@@ -481,7 +494,7 @@ async function analyseLabReport() {
       fd.append("file", state.labFile);
 
       const res = await fetch(`${API}/api/lab/parse`, { method: "POST", body: fd });
-      const serverData = await res.json();
+      const serverData = await parseJsonResponse(res);
 
       if (res.status >= 400 || serverData.error) {
         const msg = serverData.error || clientErrMsg || "Parsing failed. Please verify the document format.";
@@ -739,7 +752,7 @@ async function validateXray() {
 
   try {
     const res = await fetch(`${API}/api/xray/upload`, { method: "POST", body: fd });
-    const data = await res.json();
+    const data = await parseJsonResponse(res);
     if (res.status >= 400 || data.error) {
       const msg = data.error || "Analysis failed";
       state.xrayResult = null;
@@ -784,6 +797,11 @@ async function validateXray() {
     progressEl.style.width = "100%";
     textEl.textContent = "Error: " + (err.message ?? "Request failed");
     $("xrayProgress").style.background = "var(--red)";
+    if (errBox) {
+      errBox.classList.remove("hidden");
+      $("xrayErrorTitle").textContent = "X-Ray Screening Error";
+      $("xrayErrorMsg").textContent = err.message || "Failed to communicate with screening server.";
+    }
   }
 }
 
@@ -806,7 +824,7 @@ async function runInventory() {
 
   try {
     const res = await fetch(`${API}/api/xray/inventory`);
-    const data = await res.json();
+    const data = await parseJsonResponse(res);
     state.inventoryResult = data;
 
     resultsEl.style.display = "block";
@@ -875,7 +893,7 @@ function renderInventory(data) {
 async function fetchDatasetStats() {
   try {
     const res = await fetch(`${API}/api/lab/dataset-stats`);
-    const data = await res.json();
+    const data = await parseJsonResponse(res);
     state.datasetStats = data;
     renderPopContext(data);
   } catch {
@@ -1381,7 +1399,7 @@ async function loadDatasetStatus() {
   grid.innerHTML = `<div style="color:var(--text-faint);font-size:.85rem"><span class="spinner"></span> Loading…</div>`;
   try {
     const res = await fetch(`${API}/api/dataset/status`);
-    const data = await res.json();
+    const data = await parseJsonResponse(res);
     renderDatasetStatus(data);
   } catch (err) {
     grid.innerHTML = `<span style="color:var(--red)">${esc(err.message)}</span>`;
@@ -1446,7 +1464,7 @@ document.querySelector('[data-panel="findings"]')?.addEventListener("click", () 
 async function loadXrayModelInfo() {
   try {
     const res = await fetch(`${API}/api/xray/model-info`);
-    const data = await res.json();
+    const data = await parseJsonResponse(res);
     state.modelInfo = data;
     renderModelInfo(data);
   } catch (err) {
@@ -1525,7 +1543,7 @@ async function runScreeningSample(imagePath, displayName) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ image_path: imagePath }),
     });
-    const data = await res.json();
+    const data = await parseJsonResponse(res);
     if (data.error) {
       $("screeningBadge").textContent = "Error";
       $("screeningBadge").className = "badge badge-red";
@@ -1929,7 +1947,7 @@ async function analyzeSymptoms() {
         symptoms: state.symptoms
       })
     });
-    const data = await res.json();
+    const data = await parseJsonResponse(res);
     state.analyzedSymptoms = data;
 
     if (cardEl) {
@@ -2271,7 +2289,7 @@ async function fetchVoiceScript() {
         notes: state.notes
       })
     });
-    const data = await res.json();
+    const data = await parseJsonResponse(res);
     state.voiceScript = data;
     updateVoiceTranscriptUI();
   } catch (err) {
@@ -2990,7 +3008,7 @@ function initChatbot() {
         }),
       });
 
-      const data = await res.json();
+      const data = await parseJsonResponse(res);
       removeTypingIndicator();
 
       if (data && data.reply) {

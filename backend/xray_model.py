@@ -90,8 +90,8 @@ MODEL_LIMITATIONS = [
     "Experimental screening score only — NOT a diagnosis. Unsuitable for patient care.",
 ]
 
-# Configure PyTorch CPU multi-threading
-_num_threads = min(8, os.cpu_count() or 4)
+# Configure PyTorch CPU multi-threading (restricted for cloud containers like Render free tier)
+_num_threads = min(2, os.cpu_count() or 1)
 torch.set_num_threads(_num_threads)
 
 # ImageNet normalization standard
