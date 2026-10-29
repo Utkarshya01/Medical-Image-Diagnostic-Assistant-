@@ -1,267 +1,290 @@
-# Healthcare Diagnostic Assistant — Experimental TB Screening & Lab Report Review
+<div align="center">
 
-> ⚠️ **PERSISTENT CLINICAL & REGULATORY SAFETY DISCLAIMER**
->
-> This software is a **research and demonstration screening aid only**. It is **NOT a medical device**, has **not** been cleared or evaluated by any health regulatory authority (such as the FDA, EMA, or CDSCO), and must **NOT** be used for clinical diagnosis, patient treatment, triage, or ruling out disease.
->
-> - **The chest X-ray score is an experimental screening score, NOT a medical diagnosis.**
-> - **A laboratory result outside a reference range does NOT by itself establish a diagnosis.**
-> - **This tool cannot diagnose or rule out any condition.**
-> - **All diagnostic interpretations must be performed by a qualified, licensed physician or radiologist.**
+# 🏥 Medical Diagnostic Assistant
+### *Privacy-First Multimodal Clinical Review, ResNet-18 TB Screening & Bilingual AI Voice Assistant*
+
+<p align="center">
+  <a href="https://medical-image-diagnostic-assistant.onrender.com" target="_blank">
+    <img src="https://img.shields.io/badge/🚀_LIVE_DEMO-medical--image--diagnostic--assistant.onrender.com-00B4D8?style=for-the-badge&logo=render&logoColor=white" alt="Live Demo on Render" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://medical-image-diagnostic-assistant.onrender.com" target="_blank">
+    <img src="https://img.shields.io/badge/Render-Online-46E3B7?style=flat-square&logo=render&logoColor=white" alt="Render Status" />
+  </a>
+  <img src="https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python Versions" />
+  <img src="https://img.shields.io/badge/PyTorch-2.2%2B%20(ResNet18)-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch" />
+  <img src="https://img.shields.io/badge/Flask-3.0.3-000000?style=flat-square&logo=flask&logoColor=white" alt="Flask" />
+  <img src="https://img.shields.io/badge/Held--Out%20Test%20Acc-99.52%25-2ea44f?style=flat-square" alt="Model Accuracy" />
+  <img src="https://img.shields.io/badge/ROC--AUC-0.9991-blueviolet?style=flat-square" alt="ROC AUC" />
+  <img src="https://img.shields.io/badge/Voice%20Assistant-English%20%7C%20%E0%A4%B9%E0%A4%BF%E0%A4%82%E0%A4%A6%E0%A5%80-0077B6?style=flat-square" alt="Bilingual Audio" />
+  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License" />
+</p>
 
 ---
 
-## 1. Project Overview & Architecture
-
-The **Healthcare Diagnostic Assistant** is a local, privacy-first web application designed for exploratory review of clinical lab reports and chest radiography.
-
-### Privacy-First In-Memory Processing Guarantee
-- **Local host binding only**: Flask binds strictly to `127.0.0.1:5000` — zero external network requests or telemetry.
-- **In-memory file processing**: All uploads (PDFs, images) and user notes are parsed and evaluated directly in system RAM (`io.BytesIO`) and discarded immediately upon response.
-- **Zero persistence**: No files, raw text, or images are written to `uploads/` or stored on disk.
-- **Zero logging**: Filenames, report text, image contents, and user symptom notes are never written to log files.
-
-> 📖 **Comprehensive Technical Documentation**: For an exhaustive, feature-by-feature breakdown of every technology, deep learning model architecture, training hyperparameters, evaluation metrics, dataset specifications, and implementation details across the entire system, see [TECH_STACK_AND_ARCHITECTURE.md](TECH_STACK_AND_ARCHITECTURE.md).
+### 🌐 [Click Here to Launch the Live Web App](https://medical-image-diagnostic-assistant.onrender.com)
+*Hosted live on Render Cloud · 100% In-Memory RAM Evaluation · Zero Cloud Data Retention*
 
 ---
 
-## 2. Four-Section Workflow Overview
+</div>
 
-The interface features a vertical sidebar with four core workflow sections:
+> [!WARNING]
+> ### ⚠️ PERSISTENT CLINICAL & REGULATORY SAFETY NOTICE
+> **This software is an exploratory research and demonstration screening aid only.**
+> It is **NOT** a certified medical device, has **not** been cleared or reviewed by any health regulatory agency (such as the US FDA, EMA, or CDSCO), and must **never** be used for medical diagnosis, patient triage, treatment prescription, or ruling out disease.
+> - **The chest X-ray score is an experimental screening score, NOT a confirmed diagnosis.**
+> - **A laboratory analyte outside standard reference intervals does NOT by itself establish an illness.**
+> - **All diagnostic interpretations require evaluation by a licensed physician or certified radiologist.**
+
+---
+
+## 📑 Table of Contents
+1. [🌟 Live Deployment & Key Highlights](#-live-deployment--key-highlights)
+2. [🎨 Custom Color Palette & Design System](#-custom-color-palette--design-system)
+3. [🏗️ System Architecture & Multimodal Pipeline](#️-system-architecture--multimodal-pipeline)
+4. [🧭 Four-Section Clinical Workflow](#-four-section-clinical-workflow)
+5. [🤖 ResNet-18 Deep Learning Screening Model](#-resnet-18-deep-learning-screening-model)
+6. [📊 Held-Out Test Set Performance & Confusion Matrix](#-held-out-test-set-performance--confusion-matrix)
+7. [💻 Installation & Startup Guide (Any Device / OS)](#-installation--startup-guide-any-device--os)
+8. [🧪 Automated Test Suite (23 Tests)](#-automated-test-suite-23-tests)
+9. [📚 Citations & Dataset Attributions](#-citations--dataset-attributions)
+10. [⚖️ License & Ethical Non-Clinical Agreement](#️-license--ethical-non-clinical-agreement)
+
+---
+
+## 🌟 Live Deployment & Key Highlights
+
+| Feature | Specification | Clinical / Technical Significance |
+| :--- | :--- | :--- |
+| **🌐 Live Cloud URL** | [medical-image-diagnostic-assistant.onrender.com](https://medical-image-diagnostic-assistant.onrender.com) | Deployed on Render with multi-worker Gunicorn WSGI server |
+| **🔒 In-Memory Privacy** | `io.BytesIO` In-Memory Streams | Uploaded PDFs, photos, and notes are processed in RAM and discarded immediately — zero disk persistence |
+| **🫁 CXR Screening AI** | PyTorch ResNet-18 Baseline | Pretrained ImageNet transfer learning fine-tuned on the TB Chest Radiography Database |
+| **🧪 Lab Report Parser** | `pdfplumber` + `pytesseract` OCR | High-precision column alignment extracting test values, units, printed ranges, and flags (`HIGH`/`LOW`/`NORMAL`) |
+| **📝 Bilingual Symptoms** | Web Speech API (STT & TTS) | Dictate or type symptoms in **English** or **Hindi (`हिंदी`)** with automatic physiological domain separation |
+| **🎙️ AI Voice Walkthrough** | Web Speech Synthesis | Real-time audio assistant narrating report summaries in English and fluent Hindi with 8-bar audio visualizer |
+| **🎨 Dual Theme Engine** | Light Medical & Dark Midnight | Seamless instant toggle with zero flash on page load, customized with balanced healthcare color palettes |
+
+---
+
+## 🎨 Custom Color Palette & Design System
+
+The application features a human-designed, accessible healthcare design system tailored for low eye strain, high typographic legibility, and clinical clarity.
+
+<div align="center">
+
+### ☀️ Azure Ice & Slate — Light Medical Theme *(Default)*
+| Color Swatch | Hex Code | Semantic Role |
+| :---: | :---: | :--- |
+| ![#BDDDFC](https://via.placeholder.com/18/BDDDFC/000000?text=+) | `#BDDDFC` | **Ice Mist Accent**: Subtle highlight rings, badge backgrounds, and secondary focus states |
+| ![#88BDF2](https://via.placeholder.com/18/88BDF2/000000?text=+) | `#88BDF2` | **Azure Sky**: Primary buttons, interactive tabs, active navigation borders |
+| ![#6A89A7](https://via.placeholder.com/18/6A89A7/000000?text=+) | `#6A89A7` | **Steel Slate**: Subtitle text, table headers, container outlines, and secondary icons |
+| ![#384959](https://via.placeholder.com/18/384959/000000?text=+) | `#384959` | **Charcoal Slate**: High-contrast body typography, dark cards, and brand headlines |
+
+<br />
+
+### 🌙 Midnight Indigo & Lavender — Dark Modern Theme
+| Color Swatch | Hex Code | Semantic Role |
+| :---: | :---: | :--- |
+| ![#0F0E47](https://via.placeholder.com/18/0F0E47/000000?text=+) | `#0F0E47` | **Midnight Navy**: Primary dark backdrop, top ribbon, and deep contrast framing |
+| ![#272757](https://via.placeholder.com/18/272757/000000?text=+) | `#272757` | **Deep Indigo**: Card containers, interactive dropzones, modal dialogue background |
+| ![#505081](https://via.placeholder.com/18/505081/000000?text=+) | `#505081` | **Muted Slate**: Inactive navigation buttons, borders, subtle divider rules |
+| ![#8686AC](https://via.placeholder.com/18/8686AC/000000?text=+) | `#8686AC` | **Slate Lavender**: Secondary descriptions, metadata hints, transcript narrative text |
+| ![#34D399](https://via.placeholder.com/18/34D399/000000?text=+) | `#34D399` | **Light Mint Green**: Positive status badges, normal range indicators, audio playback active |
+
+</div>
+
+---
+
+## 🏗️ System Architecture & Multimodal Pipeline
+
+```mermaid
+flowchart TD
+    subgraph UI ["💻 Modern Frontend Client (Vanilla ES6+ · HTML5 · CSS3)"]
+        Tab1["🧪 1. Lab Report Scanner<br/>(Digital PDF & Scanned Images)"]
+        Tab2["🫁 2. Chest X-Ray AI<br/>(ResNet-18 Transfer Learning)"]
+        Tab3["📝 3. Symptom Notes<br/>(Bilingual Voice Typing & NLP)"]
+        Tab4["📋 4. Findings Summary<br/>(Non-Merged Cards + Voice Walkthrough)"]
+        Theme["🎨 Dual Theme Engine<br/>(Light Medical / Dark Modern)"]
+    end
+
+    subgraph Server ["⚡ Flask REST Server (127.0.0.1:5000 / Render Cloud)"]
+        Router["backend/routes.py (API Blueprint)"]
+        
+        subgraph Mod1 ["Modality 1: Lab Parser"]
+            Plumber["pdfplumber (Digital Vector Text)"]
+            Tess["pytesseract (Tesseract OCR Engine)"]
+            RefRange["reference_ranges.py (35+ Adult Analytes)"]
+        end
+
+        subgraph Mod2 ["Modality 2: Computer Vision"]
+            Torch["PyTorch 2.2 + Torchvision"]
+            Model["ResNet-18 CNN (ImageNet Backbone)"]
+            Weights["artifacts/tb_xray_baseline.pt (44.8 MB)"]
+        end
+
+        subgraph Mod3 ["Modality 3: Clinical NLP"]
+            Classifier["Physiological Domain Grouper"]
+            RedFlags["Red-Flag Urgency Matcher"]
+        end
+
+        subgraph Mod4 ["Modality 4: Conversational AI"]
+            VoiceGen["Bilingual Summary Narrative Engine"]
+            ChatEngine["Vida Medical Assistant (Local KB + Gemini API)"]
+        end
+    end
+
+    Tab1 -->|In-Memory Multipart Stream| Router
+    Tab2 -->|In-Memory Image Stream| Router
+    Tab3 -->|JSON Payload| Router
+    Tab4 -->|Read Aloud Request| Router
+
+    Router --> Mod1
+    Router --> Mod2
+    Router --> Mod3
+    Router --> Mod4
+
+    Mod2 --> Weights
+    Mod1 --> RefRange
+```
+
+---
+
+## 🧭 Four-Section Clinical Workflow
+
+### 1. 🧪 Section 1: Lab Report Scanner & OCR
+- **Supported Formats**: Single PDF or image (`PNG`, `JPG`, `JPEG`) up to 20 MB.
+- **Dual In-Memory Parsing**: First extracts vector text via `pdfplumber`; automatically falls back to `pytesseract` OCR for scanned physical papers.
+- **Reference Range Comparison**: Flags values as `HIGH`, `LOW`, or `NORMAL` based strictly on the report's printed reference range.
+- **Educational Definitions**: Explains fundamental lab terminology (*Test Value*, *Unit of Measurement*, *Reference Range*).
+
+### 2. 🫁 Section 2: Chest X-Ray Screening Baseline
+- **Supported Formats**: Standard chest radiography images (`PNG`, `JPG`, `JPEG`) up to 10 MB.
+- **Screening Output**: Displays an experimental screening score ($0.0000$ to $1.0000$), decision threshold ($0.50$), predicted label, and animated risk gauge.
+- **Interactive Sample Testing**: Built-in curated dataset samples (`Normal-1`, `Tuberculosis-1`) allow instant one-click testing.
+
+### 3. 📝 Section 3: Bilingual Symptom Recording & Voice Typing
+- **Bilingual Voice Input**: Dictate observations in **English (`en-US`)** or **Hindi (`hi-IN`)** via the native Web Speech API.
+- **Domain Categorization**: Automatically groups symptoms into clinical domains (*Respiratory*, *Constitutional*, *Cardiovascular*, *Gastrointestinal*).
+- **Red-Flag Clinical Warning**: High-visibility warning alert triggered on life-critical indicators (dyspnea, hemoptysis, severe chest pain, persistent high fever).
+
+### 4. 📋 Section 4: Combined Findings Summary & AI Voice Assistant
+- **Strict Non-Merging Guarantee**: Results from lab tests, chest X-rays, and patient symptoms are maintained on separate cards and are **never** combined into a false composite score.
+- **Interactive Voice Assistant**:
+  - Full spoken walkthrough of findings in **English** and **Hindi (`हिंदी`)**.
+  - Audio controls: Play (`▶️`), Pause (`⏸️`), Stop (`⏹️`), and Speed pills (`0.85x`, `1.0x`, `1.2x`).
+  - Pulsing 8-bar real-time audio visualizer.
+  - Collapsible narrative script viewer in English prose and Devanagari Hindi.
+
+---
+
+## 🤖 ResNet-18 Deep Learning Screening Model
+
+The chest radiography screening tool is built on **Transfer Learning** using a ResNet-18 convolutional neural network:
 
 ```
-[Sidebar Navigation]
-  1. 🧪 Lab Report        -> Upload lab-report PDF/image & review extracted values & definitions
-  2. 🫁 Chest X-Ray       -> Upload radiograph, test ResNet18 baseline model & view score/threshold
-  3. 📝 Symptom Notes     -> Enter optional user notes (strictly unanalyzed by AI)
-  4. 📋 Findings Summary  -> Combined overview with each data source clearly labeled & separated
+Input Radiograph (224×224 RGB)
+         │
+         ▼
+ResNet-18 Feature Extractor Backbone (Pretrained on ImageNet)
+  • 18 Convolutional Layers + Residual Skip Connections
+  • Adaptive Average Pooling (512 feature maps)
+         │
+         ▼
+Custom Binary Classification Head
+  • Dropout (p = 0.2)
+  • Linear Layer (512 inputs → 2 output logits)
+         │
+         ▼
+Softmax Probability Score (0.0000 to 1.0000)
+  • Class 0: "Normal"
+  • Class 1: "TB-consistent findings"
+  • Operational Screening Threshold: 0.50
 ```
 
-### Section 1: Lab Report (Upload & Review)
-- Accepts single PDF or image (`PNG`, `JPG`, `JPEG`) up to 20 MB.
-- Validates file headers (`%PDF-` header check, PIL structure check) in memory.
-- In-memory text extraction using `pdfplumber` with automatic OCR fallback via `pytesseract`.
-- Structured table rendering: test names, numeric values, units, printed reference ranges, and flags (`HIGH`, `LOW`, `NORMAL`).
-- Plain-language explanations based **strictly on the report's own printed ranges**.
-- **Plain-language definitions card** explaining:
-  - 🧪 **Test Value**: The specific numerical concentration or qualitative finding detected in your specimen.
-  - 📏 **Unit of Measurement**: The standardized metric scale used to express concentration (e.g. `g/dL`, `mg/dL`, `10³/µL`).
-  - 📊 **Reference Range**: The numerical interval observed in ~95% of a healthy population tested under standardized conditions.
-- **Critical Clinical Reminder**: A result outside a reference range does *not* by itself establish a diagnosis or mean an illness is present. Transient physiological variations (hydration, stress, diet, activity) frequently cause values outside normal limits.
-
-### Section 2: Chest X-Ray (Upload & Baseline Model Output)
-- Accepts chest X-ray image (`PNG`, `JPG`, `JPEG`) up to 10 MB.
-- Pretrained `torchvision` ResNet18 transfer-learning baseline with binary linear head (Normal vs TB-consistent findings).
-- Displays the experimental screening score (0.0000 to 1.0000), decision threshold (`0.50`), predicted class, and probability gauge bar.
-- Interactive sample testing with verified dataset images (`Normal-1`, `Tuberculosis-1`, etc.).
-- Non-diagnostic explanation: output reflects visual resemblance to dataset labels only.
-
-### Section 3: Symptom Recording & Voice Typing
-- **Bilingual Voice Typing**: Speak symptoms directly into the browser in either **English (`en-US`)** or **Hindi (`hi-IN`)** via the Web Speech API.
-- **Symptom Separation**: Automatically or manually parses spoken speech and entered notes into discrete, structured observation cards.
-- **Quick-Add Common Symptoms**: Instant chips for common symptoms (`Dry Cough`, `Fever`, `Shortness of Breath ⚠️`, `Chest Pain ⚠️`, `Fatigue`, `Night Sweats`, `Coughing Blood 🚨`).
-- **Physiological Domain Categorization**: Groups observations into medical physiological domains (`Respiratory / श्वसन`, `Constitutional & Systemic / दैहिक व सामान्य`, `Cardiovascular & Thoracic / हृदय व वक्षीय`, `Gastrointestinal & Other`).
-- **Red-Flag Clinical Warning**: Automatically identifies urgent clinical symptoms (dyspnea, hemoptysis, acute chest pain, persistent high fever) and flags them with high-visibility alerts.
-- **Physician Consultation Discussion Points**: Generates tailored questions to help patients organize their clinical visit.
-- **Non-Diagnostic Educational Boundaries**: Explicitly disclaims automated disease diagnosis or treatment prescribing.
-
-### Section 4: Combined Findings Summary & Bilingual Voice Assistant
-- Consolidates session observations across distinct, clearly labeled cards:
-  - **Card 1**: `🧪 Report-Extracted Facts (Source: Uploaded Lab Report)`
-  - **Card 2**: `🫁 Model Output (Source: Pretrained ResNet18 Baseline)`
-  - **Card 3**: `📝 Recorded Symptoms & Domains (Source: User Voice & Input)`
-  - **Card 4**: `🛡️ Clinical Boundaries & Non-Merging Notice`
-- **Interactive AI Voice Assistant**:
-  - Allows anyone to listen to a fluent, personalized summary walkthrough of their report in voice.
-  - **Bilingual Audio Support**: Native speech synthesis in **English** and **Hindi (`हिंदी`)**.
-  - **Controls**: Read Report Aloud (`▶️`), Pause (`⏸️`), Stop (`⏹️`), and Speed adjustment (`0.85x`, `1.0x`, `1.2x`).
-  - **Animated Visualizer**: 8-bar dynamic equalizer waveform that pulses during active playback.
-  - **Spoken Narrative Script Viewer**: Displays the exact transcript read aloud by the assistant in English or Devanagari Hindi.
-- **Non-Merging Guarantee**: The sources are maintained as independent panels and are **NEVER merged into a composite numerical risk score**.
-- Interactive empty states with quick-action buttons (`+ Upload Lab Report`, `+ Upload Chest X-Ray`, `+ Record Symptoms with Voice`).
-- Complete citations for dataset sources and active prototype scope.
-- Live local dataset status and privacy verification checklist.
+### Training Configuration & Hyperparameters
+- **Dataset**: International *TB Chest Radiography Database* (4,200 curated radiographs: 3,500 Normal, 700 Tuberculosis).
+- **Split**: Stratified 70% Train (2,940), 15% Validation (630), 15% Held-Out Test (630) using `seed = 42`.
+- **Loss Function**: `torch.nn.CrossEntropyLoss` with inverse class-frequency weighting ($\approx 5:1$) to mitigate class imbalance.
+- **Optimizer**: `Adam` (Learning Rate = `0.0001`, Weight Decay = `1e-4`).
+- **Input Dimensions**: Resized to $224 \times 224$ with ImageNet channel z-score normalization.
+- **Model Checkpoint**: Saved to [`artifacts/tb_xray_baseline.pt`](artifacts/tb_xray_baseline.pt) (44.8 MB).
 
 ---
 
-## 3. Step-by-Step Demo Checklist
+## 📊 Held-Out Test Set Performance & Confusion Matrix
 
-Follow these steps to conduct the local demonstration:
+Evaluation was conducted **strictly on the untouched 630 held-out test images** (525 Normal, 105 Tuberculosis) that were never seen during training or tuning:
 
-- [ ] **Step 1: Start the application**
-  - Run `.\.venv\Scripts\python.exe app.py`.
-  - Open `http://127.0.0.1:5000` in Google Chrome or Microsoft Edge.
-  - Confirm the API status dot in the sidebar footer displays `API online · Model ready`.
-  - Confirm the top persistent safety ribbon is visible.
+```
+                   CONFUSION MATRIX (Held-Out Test Set: N = 630)
+                               Actual Normal         Actual TB
+        Predicted Normal         524 (TN)              2 (FN)
+        Predicted TB               1 (FP)            103 (TP)
+```
 
-- [ ] **Step 2: Section 1 — Lab Report Analysis & Review**
-  - Ensure Section 1 (`1. Lab Report`) is active.
-  - Review the **Privacy-First & Local Only** notice.
-  - Review the **Plain-Language Definitions Card** (Test Value, Unit of Measurement, Reference Range) and the **Critical Clinical Reminder**.
-  - Drag and drop or choose `data/raw/Blood Test Reference Ranges.pdf`.
-  - Observe the file preview (filename, size).
-  - Click **🔍 Analyse Report**. Observe the upload progress bar (`Uploading to local RAM…` -> `Parsing PDF in memory…` -> `Extracted ✓`).
-  - Review the structured table containing extracted test names, values, units, reference intervals, flags, and plain explanations.
-
-- [ ] **Step 3: Section 2 — Chest X-Ray Baseline Model**
-  - Click `2. Chest X-Ray` in the sidebar or click `Proceed to Chest X-Ray Model →`.
-  - Review the medical disclaimer stating output is an experimental screening score, not a medical diagnosis.
-  - Inspect the **ResNet18 Model Evaluation Card** showing held-out test split metrics (99.5% accuracy, 98.1% sensitivity, 99.8% specificity, 99.0% precision, 98.6% F1, 0.9991 ROC-AUC) and the confusion matrix table.
-  - Test sample image **Normal-1**: click `Normal-1` button under the sample picker. Observe score `< 0.50`, predicted class `Normal`, and green probability bar.
-  - Test sample image **Tuberculosis-1**: click `Tuberculosis-1` button. Observe score `1.0000` (`>= 0.50`), predicted class `TB-consistent findings`, and elevated screening score badge.
-  - Test upload: choose any PNG/JPG X-ray image and click **🔍 Analyse X-Ray**.
-
-- [ ] **Step 4: Section 3 — Voice Typing & Symptom Recording**
-  - Click `3. Symptom Notes` in the sidebar.
-  - Test **Language Selection**: Toggle between `🇬🇧 English` and `🇮🇳 हिंदी` to adapt the voice typing interface.
-  - Click **🗣️ Try Sample Voice Input** (or click the microphone button to dictate).
-  - Observe that symptoms are automatically separated into discrete symptom cards.
-  - Click quick-add pills such as `+ Shortness of Breath ⚠️` and `+ Fever`.
-  - Click **🔬 Analyse Recorded Symptoms**:
-    - Observe the **Summary Metrics** (Symptoms count, Domains, Red Flags).
-    - Review the **Red-Flag Warning Banner** highlighting critical symptoms.
-    - Inspect the **Physiological Domains Breakdown** (Respiratory, Constitutional, etc.).
-    - Review the **Suggested Physician Consultation Talking Points**.
-
-- [ ] **Step 5: Section 4 — Combined Findings Summary & Voice Assistant**
-  - Click `4. Findings Summary` in the sidebar.
-  - At the top of Section 4, view the **Voice Assistant Card**.
-  - Click **▶️ Read Report Aloud**:
-    - Notice the status updates to `Speaking in English…`.
-    - Watch the animated 8-bar audio waveform visualizer dance during playback.
-    - Test **Pause (`⏸️`)**, **Resume (`▶️`)**, and **Speed Pills (`1.0x`, `1.2x`)**.
-  - Switch the language toggle to **`🇮🇳 हिंदी वॉयस (Hindi)`**:
-    - Notice the transcript accordion immediately displays the Devanagari Hindi summary narrative.
-    - Click **▶️ रिपोर्ट सुनें** to hear the report read aloud in natural Hindi.
-  - Scroll down to review all four findings cards:
-    - `🧪 Report-Extracted Facts (Source: Uploaded Lab Report)`
-    - `🫁 Model Output (Source: Pretrained ResNet18 Baseline)`
-    - `📝 Recorded Symptoms & Domains (Source: User Voice & Input)`
-    - `🛡️ Clinical Boundaries & Non-Merging Notice`
-  - Review the **Local Dataset Status & Privacy Verification** checklist.
-
----
-
-## 4. Held-Out Test Set Performance Metrics
-
-The baseline model was trained on a stratified 80% train / 5% val split of the verified 4,200 images in the *TB Chest Radiography Database* (`seed = 42`) and evaluated **strictly on the untouched 15% held-out test split** (630 images: 525 Normal, 105 Tuberculosis).
-
-| Metric | Held-Out Test Score | Evaluation Formula / Definition |
-|---|---|---|
-| **Accuracy** | **99.52%** (0.9952) | $(TP + TN) / \text{Total} = 627 / 630$ |
-| **Sensitivity (Recall)** | **98.10%** (0.9810) | $TP / (TP + FN) = 103 / 105$ (TB-consistent detection rate) |
-| **Specificity** | **99.81%** (0.9981) | $TN / (TN + FP) = 524 / 525$ (Normal exclusion rate) |
-| **Precision** | **99.04%** (0.9904) | $TP / (TP + FP) = 103 / 104$ |
-| **F1-Score** | **98.56%** (0.9856) | $2 \times (\text{Precision} \times \text{Recall}) / (\text{Precision} + \text{Recall})$ |
+| Evaluation Metric | Measured Score | Clinical Meaning |
+| :--- | :---: | :--- |
+| **Accuracy** | **99.52%** | Overall correct classifications ($627 / 630$) |
+| **Sensitivity (Recall for TB)** | **98.10%** | Detects 103 of 105 genuine TB-consistent cases |
+| **Specificity (Normal Recall)** | **99.81%** | Correctly clears 524 of 525 normal radiographs |
+| **Precision (PPV)** | **99.04%** | Probability that a positive screening flag is genuine |
+| **F1-Score** | **0.9856** | Harmonic balance between Precision and Sensitivity |
 | **ROC-AUC** | **0.9991** | Area under the Receiver Operating Characteristic curve |
 
-### Actual Confusion Matrix (630 Held-Out Test Images)
-
-```
-                       Predicted Normal    Predicted TB-Consistent    Total
-Actual Normal (525)    TN = 524            FP = 1                     525
-Actual TB (105)        FN = 2              TP = 103                   105
-Total                  526                 104                        630
-```
-
-- **True Negatives (TN = 524)**: Normal radiographs correctly categorized as Normal.
-- **False Positives (FP = 1)**: Normal radiograph flagged with TB-consistent findings.
-- **False Negatives (FN = 2)**: Radiographs with TB-consistent findings predicted as Normal.
-- **True Positives (TP = 103)**: Radiographs with TB-consistent findings correctly identified.
-
-### Patient Grouping Scope Limitation
-Source metadata files (`Normal.metadata.xlsx`, `Tuberculosis.metadata.xlsx`) do not provide patient IDs, hospital encounter numbers, age, or sex. Evaluation is strictly image-level across 4,200 radiographs. **Independent patient-level evaluation cannot be established and is not claimed.**
+> [!NOTE]
+> **Patient Grouping Limitation**: Dataset metadata lacks individual patient identifiers. Evaluation is strictly at the image level; patient-level separation cannot be claimed.
 
 ---
 
-## 5. Explicitly Deferred Features (One-Day Prototype Scope)
+## 💻 Installation & Startup Guide (Any Device / OS)
 
-To maintain safety, rigorous verification, and zero hallucination within the single-day prototype scope, the following capabilities are **explicitly deferred**:
-
-1. **Voice / native-language input**: Deferred to prevent transcription inaccuracies and non-deterministic translation errors.
-2. **Symptom NLP**: Deferred; notes are strictly user-entered and unanalyzed to prevent speculative AI diagnostic leaps.
-3. **OCR on arbitrary report layouts beyond prototype**: Deferred to avoid misparsing unstructured heterogeneous commercial lab layouts.
-4. **Knowledge graph**: Deferred; no external ontological disease-relation mapping.
-5. **Cross-modal clinical risk scoring**: Deferred; outputs are never combined into a composite clinical risk score.
-6. **Heatmap explanations (Grad-CAM)**: Deferred; saliency maps can produce misleading clinical reassurance.
-7. **Automated specialist routing**: Deferred; patient triage must be managed by licensed clinicians.
-8. **Medication safety alerts**: Deferred; prescription drug interactions require validated clinical pharmacopeia engines.
-9. **Diabetic retinopathy and oral cancer screening**: Deferred; out of scope for the current pulmonary and routine blood panel prototype.
-
----
-
-## 6. Citations & Dataset Attributions
-
-### 1. NLM Montgomery & Shenzhen Chest X-Ray Datasets
-> Jaeger S, Karargyris A, Candemir S, Folio L, Siegelman J, Callaghan F, Xue Z, Dang C, Chou P, Prevedello LM, Lu PX, Antani S.  
-> *"Two public chest X-ray datasets for computer-aided screening of pulmonary diseases."*  
-> **Quantitative Imaging in Medicine and Surgery**, 2014;4(6):475-477.  
-> [doi:10.3978/j.issn.2223-4292.2014.11.20](https://doi.org/10.3978/j.issn.2223-4292.2014.11.20)  
-> *Collaboration between Shenzhen No. 3 People's Hospital (Guangdong, China) and National Library of Medicine (NIH, Bethesda, MD, USA).*
-
-### 2. TB Chest Radiography Database
-> Rahman T, Khandakar A, Kadir MA, Islam KR, Islam KF, Mazhar R, Hamid T, Islam MT, Kashem S, Mahbub ZB, Ayari MA, Chowdhury MEH.  
-> *"Reliable Tuberculosis Detection using Chest X-ray with Deep Learning, Segmentation and Visualization."*  
-> **IEEE Access**, 2020;8:191586-191601.  
-> [doi:10.1109/ACCESS.2020.3031384](https://doi.org/10.1109/ACCESS.2020.3031384)
-
-### 3. Sample Laboratory Report & Reference Ranges
-> Synthetic lab report documents and reference intervals compiled from standard adult clinical pathology references (e.g. *Tietz Textbook of Clinical Chemistry and Molecular Diagnostics*). Provided strictly for non-clinical software testing and pair-programming development.
-
----
-
-## 7. Installation & Startup Instructions (Any Device / OS)
-
-The application runs entirely locally on **Windows**, **macOS**, and **Linux**.
+You can run the application locally on **Windows**, **macOS**, or **Linux**.
 
 ### Prerequisites
-- **Python**: Version `3.10` or higher (tested with Python 3.10, 3.11, 3.12, and 3.13)
-- **Modern Web Browser**: Google Chrome, Microsoft Edge, Mozilla Firefox, or Apple Safari
-- *(Optional)* **Tesseract OCR**: Required only if you wish to parse scanned/raster PDF reports or image-only lab photos via OCR:
-  - **Windows**: Download the installer from [UB-Mannheim Tesseract](https://github.com/UB-Mannheim/tesseract/wiki) or install via winget: `winget install UB-Mannheim.TesseractOCR`
+- **Python 3.10+** (tested with 3.10, 3.11, 3.12, 3.13)
+- Modern web browser (Chrome, Edge, Firefox, Safari)
+- *(Optional)* **Tesseract OCR** for scanned PDF/image reports:
+  - **Windows**: `winget install UB-Mannheim.TesseractOCR`
   - **macOS**: `brew install tesseract`
-  - **Linux (Ubuntu/Debian)**: `sudo apt update && sudo apt install -y tesseract-ocr`
+  - **Linux**: `sudo apt update && sudo apt install -y tesseract-ocr`
 
 ---
 
-### Step-by-Step Setup
+### Step-by-Step Local Setup
 
-#### Step 1: Open Terminal / Shell
-Navigate to the project root directory:
+#### 1. Clone the Repository
 ```bash
-cd "Health care dignostic sysytem"
+git clone https://github.com/Utkarshya01/Medical-Image-Diagnostic-Assistant-.git
+cd Medical-Image-Diagnostic-Assistant-
 ```
 
-#### Step 2: Create & Activate a Python Virtual Environment
-
-- **On Windows (PowerShell)**:
+#### 2. Create & Activate a Virtual Environment
+- **Windows (PowerShell)**:
   ```powershell
   python -m venv .venv
   .\.venv\Scripts\Activate.ps1
   ```
-  *(If PowerShell script execution is restricted, run: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`)*
-
-- **On Windows (Command Prompt `cmd.exe`)**:
+- **Windows (Command Prompt `cmd.exe`)**:
   ```cmd
   python -m venv .venv
   .\.venv\Scripts\activate.bat
   ```
-
-- **On macOS / Linux (bash or zsh)**:
+- **macOS / Linux**:
   ```bash
   python3 -m venv .venv
   source .venv/bin/activate
   ```
 
-#### Step 3: Install Required Dependencies
-With the virtual environment active, install all required packages:
+#### 3. Install Dependencies
 ```bash
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-#### Step 4: Start the Local Flask Application Server
-Run the Flask server:
+#### 4. Launch the Server
 - **Windows**:
   ```powershell
   python app.py
@@ -271,38 +294,26 @@ Run the Flask server:
   python3 app.py
   ```
 
-Expected startup log:
-```
- * Serving Flask app 'app'
- * Debug mode: on
- * Running on http://127.0.0.1:5000
- * Application ready!
-```
-
-#### Step 5: Access the Web Interface
-Open your browser and navigate to:
+#### 5. Open in Your Browser
 ```
 http://127.0.0.1:5000/
 ```
-The application will load immediately in **Light Mode** (default) with options to switch between Light and Dark modes.
+The interface loads in **Light Mode** by default.
 
 ---
 
-### Running the Automated Test Suite (23 Tests)
-To verify that all routes, models, OCR extractors, symptom parsers, and summary endpoints are functional on your device:
+## 🧪 Automated Test Suite (23 Tests)
 
-- **Windows**:
-  ```powershell
-  python tests/test_demo.py
-  ```
-- **macOS / Linux**:
-  ```bash
-  python3 tests/test_demo.py
-  ```
+To verify all REST endpoints, ResNet-18 model scoring, OCR parsers, and summary audio generators:
 
-Expected test result:
+```bash
+python tests/test_demo.py
+```
+
+Expected output:
 ```
 == Healthcare Diagnostic Assistant - Baseline Test Suite ==
+
 [PASS] GET /api/health -> 200 OK
 [PASS] Disclaimer text present in /api/health
 [PASS] GET /api/model/status -> 200 (model available & threshold=0.50)
@@ -312,6 +323,7 @@ Expected test result:
 [PASS] POST /api/lab/parse (empty file) -> 400
 [PASS] POST /api/lab/parse (corrupted PDF header) -> 400
 [PASS] POST /api/xray/upload (corrupted image bytes) -> 400
+[PASS] POST /api/xray/upload (non-CXR image rejected) -> 400
 [PASS] POST /api/xray/upload (model class, score/threshold, non-diagnostic explanation verified)
 [PASS] POST /api/lab/parse (in-memory parsing of reference PDF) -> 200 (rows=14)
 [PASS] POST /api/lab/parse (scanned PDF via Tesseract OCR) -> 200 (ocr_used=True)
@@ -331,9 +343,35 @@ Expected test result:
 ================================================
 ```
 
+---
+
+## 📚 Citations & Dataset Attributions
+
+1. **TB Chest Radiography Database**:
+   > Rahman T, Khandakar A, Kadir MA, Islam KR, Islam KF, Mazhar R, Hamid T, Islam MT, Kashem S, Mahbub ZB, Ayari MA, Chowdhury MEH.  
+   > *"Reliable Tuberculosis Detection using Chest X-ray with Deep Learning, Segmentation and Visualization."*  
+   > **IEEE Access**, 2020;8:191586-191601. [doi:10.1109/ACCESS.2020.3031384](https://doi.org/10.1109/ACCESS.2020.3031384)
+
+2. **NLM Montgomery County & Shenzhen Radiography Sets**:
+   > Jaeger S, Karargyris A, Candemir S, Folio L, Siegelman J, Callaghan F, Xue Z, Dang C, Chou P, Prevedello LM, Lu PX, Antani S.  
+   > *"Two public chest X-ray datasets for computer-aided screening of pulmonary diseases."*  
+   > **Quantitative Imaging in Medicine and Surgery**, 2014;4(6):475-477. [doi:10.3978/j.issn.2223-4292.2014.11.20](https://doi.org/10.3978/j.issn.2223-4292.2014.11.20)
 
 ---
 
-## 8. License & Non-Clinical Use Agreement
+## ⚖️ License & Ethical Non-Clinical Agreement
 
-This prototype is made available under the **MIT License** for academic, research, and technical evaluation purposes only. Commercial medical use, diagnostic decision-making, patient triage, and clinical deployment are strictly prohibited.
+This project is licensed under the **MIT License**.
+
+```
+Copyright (c) 2026 Utkarshya01
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, subject to the condition that this software
+is NOT used as a medical diagnostic device or in clinical treatment decisions.
+```
+
+<div align="center">
+  <b>Built with ❤️ for accessible, privacy-first healthcare AI research.</b>
+</div>
