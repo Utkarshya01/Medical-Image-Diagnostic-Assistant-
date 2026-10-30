@@ -621,17 +621,19 @@ function renderLabResults(data) {
       const flagHtml = flag
         ? `<span class="flag-badge flag-${flag === "HIGH" ? "high" : flag === "LOW" ? "low" : "normal"}">${esc(flag)}</span>`
         : `<span class="flag-none">—</span>`;
-      const unitHtml = isUncertain(row.unit) ? `<span class="uncertain">${esc(row.unit)}</span>` : esc(row.unit);
+      const unitHtml = isUncertain(row.unit) ? `<span class="uncertain">—</span>` : esc(row.unit);
       const rangeHtml = isUncertain(row.ref_range)
-        ? `<span class="uncertain">${esc(row.ref_range)}</span>`
+        ? `<span class="uncertain">—</span>`
         : esc(row.ref_range);
+      const shortExp = formatShortExplanation(row);
+      row.plain_explanation = shortExp;
       return `<tr data-idx="${idx}">
         <td contenteditable="true" class="editable-cell" data-field="test_name" title="Click to edit test name"><strong>${esc(row.test_name)}</strong></td>
         <td contenteditable="true" class="editable-cell" data-field="value" title="Click to edit value or decimal"><code>${esc(row.value)}</code></td>
         <td contenteditable="true" class="editable-cell" data-field="unit" title="Click to edit unit">${unitHtml}</td>
         <td contenteditable="true" class="editable-cell" data-field="ref_range" title="Click to edit reference range">${rangeHtml}</td>
         <td class="flag-cell">${flagHtml}</td>
-        <td class="explanation-cell">${esc(row.plain_explanation ?? "")}</td>
+        <td class="explanation-cell">${esc(shortExp)}</td>
       </tr>`;
     }).join("");
 
@@ -673,6 +675,11 @@ function renderLabResults(data) {
             ? `<span class="flag-badge flag-${f === "HIGH" ? "high" : f === "LOW" ? "low" : "normal"}">${esc(f)}</span>`
             : `<span class="flag-none">—</span>`;
         }
+        const expCell = tr.querySelector(".explanation-cell");
+        if (expCell) {
+          row.plain_explanation = formatShortExplanation(row);
+          expCell.textContent = row.plain_explanation;
+        }
         syncFindingsPanel();
       }
     };
@@ -688,7 +695,24 @@ function renderLabResults(data) {
 }
 
 function isUncertain(s) {
-  return !s || s === "Please check the original report.";
+  return !s || s === "Please check the original report." || s === "Not specified" || s === "—";
+}
+
+function formatShortExplanation(row) {
+  const flag = (row.flag || row.ref_flag || "").toUpperCase();
+  const ref = row.ref_range;
+  const isRefMissing = isUncertain(ref);
+
+  if (isRefMissing) {
+    if (flag === "HIGH") return "High: Elevated level";
+    if (flag === "LOW") return "Low: Below standard level";
+    return "Normal";
+  }
+
+  if (flag === "HIGH") return "High: Above expected range";
+  if (flag === "LOW") return "Low: Below expected range";
+  if (flag === "NORMAL") return "Normal: Within expected range";
+  return "Normal";
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -960,7 +984,7 @@ function syncFindingsPanel() {
           <tr style="border-bottom: 1px solid var(--border);">
             <td style="padding: .4rem .5rem; font-weight: 600;">${esc(row.test_name)}</td>
             <td style="padding: .4rem .5rem;"><code>${esc(row.value)} ${esc(row.unit || '')}</code></td>
-            <td style="padding: .4rem .5rem; color: var(--text-muted); font-size: .8rem;">${esc(row.ref_range || '—')}</td>
+            <td style="padding: .4rem .5rem; color: var(--text-muted); font-size: .8rem;">${isUncertain(row.ref_range) ? '—' : esc(row.ref_range)}</td>
             <td style="padding: .4rem .5rem;">${flagBadge}</td>
           </tr>
         `;

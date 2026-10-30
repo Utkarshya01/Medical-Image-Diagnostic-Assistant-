@@ -448,25 +448,26 @@
   }
 
   function generatePlainExplanation(row) {
-    const name = row.test_name || "This test";
-    const val = row.value;
-    const unit = row.unit && row.unit !== UNCERTAIN_NOTE ? row.unit : "";
-    const ref = row.ref_range;
     const flag = (row.flag || "").toUpperCase();
+    const ref = row.ref_range;
+    const isRefMissing = !ref || ref === UNCERTAIN_NOTE || ref === "—" || ref === "Not specified";
 
-    if (!ref || ref === UNCERTAIN_NOTE) {
-      return `${name}: ${val} ${unit}. The reference range was not clearly printed on this report. Please check the original document and consult a qualified healthcare professional.`;
+    if (isRefMissing) {
+      if (flag === "HIGH") return "High: Elevated level";
+      if (flag === "LOW") return "Low: Below standard level";
+      return "Normal";
     }
+
     if (flag === "HIGH") {
-      return `${name}: ${val} ${unit} is marked High (above the upper limit of the reference range printed on this report: ${ref}). Reference ranges vary across laboratories and methods. A single out-of-range value does not diagnose any condition. Discuss this result with a qualified healthcare professional.`;
+      return "High: Above expected range";
     }
     if (flag === "LOW") {
-      return `${name}: ${val} ${unit} is marked Low (below the lower limit of the reference range printed on this report: ${ref}). Reference ranges vary across laboratories and methods. A single out-of-range value does not diagnose any condition. Discuss this result with a qualified healthcare professional.`;
+      return "Low: Below expected range";
     }
     if (flag === "NORMAL") {
-      return `${name}: ${val} ${unit} is marked Normal (within the reference range printed on this report: ${ref}). Discuss all lab results with a qualified healthcare professional.`;
+      return "Normal: Within expected range";
     }
-    return `${name}: ${val} ${unit}. Reference range printed on this report is ${ref}. Discuss this result with your healthcare professional.`;
+    return "Normal";
   }
 
   // ---------------------------------------------------------------------------

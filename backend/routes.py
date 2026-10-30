@@ -172,50 +172,30 @@ def lab_parse():
 
 def _plain_explanation(row: dict) -> str:
     """
-    Generate a cautious, plain-language explanation based ONLY on the report's own printed range.
+    Generate a concise, very short plain-language explanation.
     Never infers diseases, never recommends medication, never calculates risk.
     """
-    name  = row.get("test_name", "This test")
-    value = row.get("value", "")
-    unit  = row.get("unit", "")
     ref   = row.get("ref_range", "")
     flag  = (row.get("flag") or "").upper()
 
-    is_ref_uncertain = not ref or ref == "Please check the original report."
+    is_ref_uncertain = not ref or ref == "Please check the original report." or ref == "—" or ref == "Not specified"
 
     if is_ref_uncertain:
-        return (
-            f"{name}: {value} {unit}. "
-            "The reference range was not clearly printed on this report. "
-            "Please check the original document and consult a qualified healthcare professional."
-        )
+        if flag == "HIGH":
+            return "High: Elevated level"
+        elif flag == "LOW":
+            return "Low: Below standard level"
+        else:
+            return "Normal"
 
     if flag == "HIGH":
-        return (
-            f"{name}: {value} {unit} is marked High (above the upper limit of the "
-            f"reference range printed on this report: {ref}). "
-            "Reference ranges vary across laboratories and methods. "
-            "A single out-of-range value does not diagnose any condition. "
-            "Discuss this result with a qualified healthcare professional."
-        )
+        return "High: Above expected range"
     elif flag == "LOW":
-        return (
-            f"{name}: {value} {unit} is marked Low (below the lower limit of the "
-            f"reference range printed on this report: {ref}). "
-            "Reference ranges vary across laboratories and methods. "
-            "A single out-of-range value does not diagnose any condition. "
-            "Discuss this result with a qualified healthcare professional."
-        )
+        return "Low: Below expected range"
     elif flag == "NORMAL":
-        return (
-            f"{name}: {value} {unit} is marked Normal (within the reference range printed on this report: {ref}). "
-            "Discuss all lab results with a qualified healthcare professional."
-        )
+        return "Normal: Within expected range"
     else:
-        return (
-            f"{name}: {value} {unit}. Reference range printed on this report is {ref}. "
-            "Discuss this result with your healthcare professional."
-        )
+        return "Normal"
 
 
 # ---------------------------------------------------------------------------
